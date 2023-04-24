@@ -1,8 +1,9 @@
 const express = require("express");
-const router = express.Router();
 const authRouter = require("./auth");
 
-router.get("/api", (req, res, next) => {
+const router = express.Router();
+
+router.get("/", (req, res, next) => {
   res.status(200).send("api endpoint");
 });
 

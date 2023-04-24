@@ -2,13 +2,16 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv").config();
+const morgan = require("morgan");
 const app = express();
 
+/* These lines of code are setting up middleware for the Express application: */
+app.use(cors());
+app.use(morgan("tiny"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cors());
 
-app.use("/api", require("./routes/index")); 
+app.use("/api", require("./routes/index"));
 
 const url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@taylorgram.plovuar.mongodb.net/?retryWrites=true&w=majority`;
 

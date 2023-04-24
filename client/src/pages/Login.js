@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, InputGroup } from "react-bootstrap";
+import axios from "../hooks/useAxios";
 
 const Login = () => {
   const initialState = {
@@ -9,6 +10,7 @@ const Login = () => {
   };
 
   const [formData, setFormData] = useState(initialState);
+  const [validated, setValidated] = useState(false);
 
   /**
    * The function updates the state of a form data object with the value of the input field that
@@ -24,33 +26,61 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    try {
+      await axios.post("/auth/login", formData)
+    } catch (error) {
+      console.log(error)
+    }
+
+    setValidated(true);
   };
 
+  console.log(formData);
+
   return (
-    <Form onSubmit={handleSubmit}>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>Email address</Form.Label>
-        <Form.Control
-          type="email"
-          name="email"
-          placeholder="Enter email"
-          onChange={handleInput}
-        />
-        <Form.Text className="text-muted">
-          We'll never share your email with anyone else.
-        </Form.Text>
+    <Form noValidate validated={validated} onSubmit={handleSubmit}>
+      <Form.Group className="mb-3" controlId="formBasicUsername">
+        <Form.Label>Username</Form.Label>
+        <InputGroup hasValidation>
+          <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
+          <Form.Control
+            required
+            type="text"
+            name="username"
+            value={formData.username}
+            aria-describedby="inputGroupPrepend"
+            placeholder="Enter username"
+            autoComplete="username"
+            onChange={handleInput}
+          />
+          <Form.Control.Feedback type="invalid">
+            Please enter your username.
+          </Form.Control.Feedback>
+        </InputGroup>
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>Password</Form.Label>
         <Form.Control
+          required
           type="password"
           placeholder="Password"
           name="password"
+          value={formData.password}
+          autoComplete="current-password"
           onChange={handleInput}
         />
+        <Form.Control.Feedback type="invalid">
+          Please enter your password.
+        </Form.Control.Feedback>
       </Form.Group>
 
       <Button variant="primary" type="submit">

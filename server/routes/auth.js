@@ -11,13 +11,15 @@ router.route("/").get((req, res, next) => {
 router.post("/register", async (req, res) => {
   const { email, username, password, nickname } = req.body;
 
+  console.log(req.body);
+
   if (password.length < 7) {
     return res
       .status(400)
       .json({ error: "Password must be atleast 7 characters" });
   }
 
-  if (!password || !username || !email || !nickname) {
+  if (!password || !username || !email) {
     return res.status(422).json({ error: "All fields not filled" });
   }
 

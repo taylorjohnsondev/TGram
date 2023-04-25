@@ -1,27 +1,19 @@
 import { useState } from "react";
-import { Form, Button, InputGroup } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import axios from "../hooks/useAxios";
-import { useNavigate } from "react-router-dom";
 
-const Login = () => {
-  const navigate = useNavigate();
-
+const Register = () => {
   const initialState = {
+    email: "",
     username: "",
     password: "",
+    nickname: "",
     error: "",
   };
 
   const [formData, setFormData] = useState(initialState);
   const [validated, setValidated] = useState(false);
 
-  /**
-   * The function updates the state of a form data object with the value of the input field that
-   * triggered the event.
-   * @param e - The parameter "e" is an event object that is passed as an argument to the function
-   * "handleInput". It represents the event that triggered the function, such as a user typing in an
-   * input field or clicking a button.
-   */
   const handleInput = (e) => {
     setFormData({
       ...formData,
@@ -38,7 +30,7 @@ const Login = () => {
       e.stopPropagation();
     }
     try {
-      await axios.post("/auth/login", formData);
+      await axios.post("/auth/register", formData);
     } catch (error) {
       console.log(error);
     }
@@ -51,25 +43,38 @@ const Login = () => {
   return (
     <>
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
-        <h1>Login</h1>
+        <h1>Register</h1>
+
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>Email</Form.Label>
+          <Form.Control
+            required
+            type="email"
+            placeholder="Email"
+            name="email"
+            value={formData.email}
+            autoComplete="email"
+            onChange={handleInput}
+          />
+          <Form.Control.Feedback type="invalid">
+            Please enter a valid email address.
+          </Form.Control.Feedback>
+        </Form.Group>
+
         <Form.Group className="mb-3" controlId="formBasicUsername">
           <Form.Label>Username</Form.Label>
-          <InputGroup hasValidation>
-            <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
-            <Form.Control
-              required
-              type="text"
-              name="username"
-              value={formData.username}
-              aria-describedby="inputGroupPrepend"
-              placeholder="Enter username"
-              autoComplete="username"
-              onChange={handleInput}
-            />
-            <Form.Control.Feedback type="invalid">
-              Please enter your username.
-            </Form.Control.Feedback>
-          </InputGroup>
+          <Form.Control
+            required
+            type="text"
+            name="username"
+            value={formData.username}
+            placeholder="Enter username"
+            autoComplete="username"
+            onChange={handleInput}
+          />
+          <Form.Control.Feedback type="invalid">
+            Please enter your username.
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -92,12 +97,8 @@ const Login = () => {
           Submit
         </Button>
       </Form>
-      <br />
-      Don't have an account?
-      <br /> 
-      <Button onClick={() => navigate("/register")}>Register here</Button>
     </>
   );
 };
 
-export default Login;
+export default Register;

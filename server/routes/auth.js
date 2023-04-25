@@ -33,7 +33,7 @@ router.post("/register", async (req, res) => {
           email,
           username,
           password: encryptedpass,
-          fullname,
+          nickname,
         });
 
         const token = jwt.sign(

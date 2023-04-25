@@ -1,4 +1,5 @@
 const express = require("express");
+const passport = require("passport");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const router = express.Router();
@@ -91,5 +92,33 @@ router.post("/login", async (req, res) => {
   res.status(200);
   res.send({ token, username, uid: user.id });
 });
+
+/* This code is defining a route for initiating the Google OAuth authentication process. When a user
+navigates to this route, the `passport.authenticate` middleware with the "google" strategy is
+triggered, which redirects the user to the Google OAuth consent screen with the requested scopes of
+"profile" and "email". If the user grants permission, they will be redirected back to the
+application's callback URL with an authorization code that can be exchanged for an access token. */
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+/* This code is defining a route for handling the callback from Google OAuth authentication. When the
+user is redirected back to the application after authenticating with Google, this route is
+triggered. It uses the `passport.authenticate` middleware with the "google" strategy to verify the
+user's identity. If the authentication is successful, the `req.user` object will contain information
+about the authenticated user. The route then redirects the user to the homepage of the application
+at "http://localhost:3000". */
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    passReqToCallback: true,
+    session: false,
+    failureRedirect: "/",
+  }),
+  (req, res) => {
+    res.redirect("http://localhost:3000");
+  }
+);
 
 module.exports = router;

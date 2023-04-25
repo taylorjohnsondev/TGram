@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
   nickname: {
     type: String,
     default: "",
-  }, 
+  },
   username: {
     type: String,
     unique: true,
@@ -17,7 +17,12 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+  },
+  googleId: {
+    type: String,
+  },
+  googlePicture: {
+    type: String,
   },
 });
 

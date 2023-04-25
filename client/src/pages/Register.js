@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import axios from "../hooks/useAxios";
+import { API_URL } from "../configs/constants";
 
 const Register = () => {
   const initialState = {
@@ -38,7 +39,19 @@ const Register = () => {
     setValidated(true);
   };
 
-  console.log(formData);
+  const handleGoogleLogIn = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Open the Google Login URL
+      window.open(
+        `http://localhost:3001${API_URL}/auth/google`,
+        "_self"
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -97,6 +110,14 @@ const Register = () => {
           Submit
         </Button>
       </Form>
+      Or use Google{" "}
+      <Button
+        variant="primary"
+        type="submit"
+        onClick={(e) => handleGoogleLogIn(e)}
+      >
+        Sign in with Google
+      </Button>
     </>
   );
 };

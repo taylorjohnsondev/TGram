@@ -2,13 +2,18 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv").config();
+const passport = require("passport");
 const morgan = require("morgan");
+
+require("./config/passport")(passport);
+
 const app = express();
 
 /* These lines of code are setting up middleware for the Express application: */
 app.use(cors());
 app.use(morgan("tiny"));
 app.use(express.urlencoded({ extended: false }));
+app.use(passport.initialize());
 app.use(express.json());
 
 app.use("/api", require("./routes/index"));

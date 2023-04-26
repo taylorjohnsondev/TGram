@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
-import axios from "../hooks/useAxios";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { API_URL } from "../configs/constants";
 
 const Register = () => {
+  const navigate = useNavigate();
   const initialState = {
     email: "",
     username: "",
@@ -14,6 +16,7 @@ const Register = () => {
 
   const [formData, setFormData] = useState(initialState);
   const [validated, setValidated] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const handleInput = (e) => {
     setFormData({
@@ -31,7 +34,10 @@ const Register = () => {
       e.stopPropagation();
     }
     try {
-      await axios.post("/auth/register", formData);
+      const response = await axios.post("api/auth/register", formData);
+      localStorage.setItem("user", JSON.stringify(response.data));
+      navigate("/");
+      navigate(0);
     } catch (error) {
       console.log(error);
     }
@@ -44,14 +50,26 @@ const Register = () => {
 
     try {
       // Open the Google Login URL
-      window.open(
-        `http://localhost:3001${API_URL}/auth/google`,
-        "_self"
-      );
+      window.open(`http://localhost:3001${API_URL}/auth/google`, "_self");
     } catch (error) {
       console.log(error);
     }
   };
+
+  function handleLogout() {
+    localStorage.clear();
+    navigate("/");
+    navigate(0);
+  }
+ 
+  if (user) {
+    return (
+      <div>
+        @{user.username}, you are already registered.
+        <Button onClick={handleLogout}>Log out</Button>
+      </div>
+    );
+  }
 
   return (
     <>

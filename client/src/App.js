@@ -2,16 +2,20 @@ import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import Homepage from "./pages/Homepage";
 import Register from "./pages/Register";
+import Profile from "./pages/Profile";
 import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
     <>
       <Routes>
+        {/* Normal Routes */}
         <Route path="/" element={<Homepage />} />
         <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} /> 
+        <Route path="register" element={<Register />} />
 
+        {/* We need to protect these routes */}
+        <Route path="/users/:uid" element={<Profile />} />
       </Routes>
 
       <Navbar />

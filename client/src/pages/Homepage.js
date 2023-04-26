@@ -4,7 +4,7 @@ import { FaRegComment } from "react-icons/fa";
 
 const Homepage = () => {
   return (
-    <>
+    <> 
       <div className="post-container">
         <div className="username">Taylor Johnson</div>
         <div className="username">@TaylorJohnson</div>

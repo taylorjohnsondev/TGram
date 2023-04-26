@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Form, Button, InputGroup } from "react-bootstrap";
-import axios from "../hooks/useAxios";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -14,14 +14,8 @@ const Login = () => {
 
   const [formData, setFormData] = useState(initialState);
   const [validated, setValidated] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  /**
-   * The function updates the state of a form data object with the value of the input field that
-   * triggered the event.
-   * @param e - The parameter "e" is an event object that is passed as an argument to the function
-   * "handleInput". It represents the event that triggered the function, such as a user typing in an
-   * input field or clicking a button.
-   */
   const handleInput = (e) => {
     setFormData({
       ...formData,
@@ -38,7 +32,10 @@ const Login = () => {
       e.stopPropagation();
     }
     try {
-      await axios.post("/auth/login", formData);
+     const response = await axios.post("api/auth/login", formData);
+      localStorage.setItem("user", JSON.stringify(response.data));
+      navigate("/");
+      navigate(0); 
     } catch (error) {
       console.log(error);
     }
@@ -47,6 +44,26 @@ const Login = () => {
   };
 
   console.log(formData);
+
+  function handleLogout() {
+    localStorage.clear();
+    navigate("/");
+    navigate(0);
+  }
+
+  if (user) {
+    return (
+      <div className="logout-container">
+        <div className="logout-card">
+          @{user.username}, are you sure you want to log out?
+          <br />
+          <Button className="logout-btn" onClick={handleLogout}>
+            Log out
+          </Button>
+        </div> 
+      </div>
+    );
+  } 
 
   return (
     <>
@@ -94,7 +111,7 @@ const Login = () => {
       </Form>
       <br />
       Don't have an account?
-      <br /> 
+      <br />
       <Button onClick={() => navigate("/register")}>Register here</Button>
     </>
   );

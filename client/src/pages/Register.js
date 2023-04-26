@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Form, Button } from "react-bootstrap";
+<<<<<<< HEAD
 import axios from "../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../configs/constants";
@@ -11,11 +12,30 @@ const initialState = {
   nickname: "",
   error: "",
 };
+=======
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { API_URL } from "../configs/constants";
+
+const Register = () => {
+  const navigate = useNavigate();
+  const initialState = {
+    email: "",
+    username: "",
+    password: "",
+    nickname: "",
+    error: "",
+  };
+>>>>>>> b3a6c768f7197b8c80409e6de485e0ecbde08078
 
 const Register = () => {
   const [formData, setFormData] = useState(initialState);
   const [validated, setValidated] = useState(false);
+<<<<<<< HEAD
   const [user, setUser] = useState("");
+=======
+  const user = JSON.parse(localStorage.getItem("user"));
+>>>>>>> b3a6c768f7197b8c80409e6de485e0ecbde08078
 
   const handleInput = (e) => {
     setFormData({
@@ -33,7 +53,10 @@ const Register = () => {
       e.stopPropagation();
     }
     try {
-      await axios.post("/auth/register", formData);
+      const response = await axios.post("api/auth/register", formData);
+      localStorage.setItem("user", JSON.stringify(response.data));
+      navigate("/");
+      navigate(0);
     } catch (error) {
       console.log(error);
     }
@@ -72,6 +95,7 @@ const Register = () => {
 
     try {
       // Open the Google Login URL
+<<<<<<< HEAD
       const newWindow = window.open(
         `http://localhost:3001${API_URL}/auth/google`,
         "_blank",
@@ -90,10 +114,28 @@ const Register = () => {
           }
         }, 500);
       }
+=======
+      window.open(`http://localhost:3001${API_URL}/auth/google`, "_self");
+>>>>>>> b3a6c768f7197b8c80409e6de485e0ecbde08078
     } catch (error) {
       console.log(error);
     }
   };
+
+  function handleLogout() {
+    localStorage.clear();
+    navigate("/");
+    navigate(0);
+  }
+ 
+  if (user) {
+    return (
+      <div>
+        @{user.username}, you are already registered.
+        <Button onClick={handleLogout}>Log out</Button>
+      </div>
+    );
+  }
 
   return (
     <>

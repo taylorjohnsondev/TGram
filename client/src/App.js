@@ -14,6 +14,7 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route path="googleSuccess" element={<GoogleSuccess />} />
       </Routes>
 
       <Navbar />

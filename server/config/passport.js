@@ -17,15 +17,6 @@ module.exports = function (passport) {
         callbackURL: GOOGLE_CALLBACK_URL,
       },
       async (accessToken, refreshToken, profile, done) => {
-        //generate JWT with user info from google
-        const token = jwt.sign(
-          {
-            username: profile.emails[0].value,
-            id: profile.id,
-          },
-          JWT_SECRET
-        );
-
         const newUser = {
           googleId: profile.id,
           name: profile.displayName,
@@ -69,6 +60,8 @@ in the session. */
   `done` function. The deserialized user object is then available on the `req.user` object in
   subsequent requests. */
   passport.deserializeUser((id, done) => {
-    User.findById(id, (err, user) => done(err, user));
+    User.findById(id)
+      .then((user) => done(null, user))
+      .catch((err) => done(err, null));
   });
 };

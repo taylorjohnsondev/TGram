@@ -2,23 +2,53 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv").config();
+const session = require("express-session");
 const passport = require("passport");
+
 const morgan = require("morgan");
+const {
+  DB_USERNAME,
+  DB_PASSWORD,
+  SESSION_SECRET,
+} = require("./config/constants");
 
 require("./config/passport")(passport);
 
 const app = express();
 
+app.use(function (req, res, next) {
+  res.locals.currentUser = req.user;
+  next();
+});
+
+app.use(
+  session({
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    unset: "keep",
+    cookie: {
+      secure: false,
+      httpOnly: true,
+      maxAge: 60 * 60 * 1000,
+    },
+  })
+);
+
 /* These lines of code are setting up middleware for the Express application: */
-app.use(cors());
-app.use(morgan("tiny"));
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
-app.use(passport.initialize());
 app.use(express.json());
 
+//Passport.js Middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+//routes
 app.use("/api", require("./routes/index"));
 
-const url = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@taylorgram.plovuar.mongodb.net/?retryWrites=true&w=majority`;
+const url = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@taylorgram.plovuar.mongodb.net/?retryWrites=true&w=majority`;
 
 async function connectDB() {
   try {

@@ -6,6 +6,7 @@ const CLIENT_HOME_PAGE_URL = process.env.CLIENT_HOME_PAGE_URL;
 const DB_USERNAME = process.env.DB_USERNAME;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const JWT_SECRET = process.env.JWT_SECRET;
+const SESSION_SECRET = process.env.SESSION_SECRET;
 
 module.exports = {
   NODE_ENV,
@@ -16,4 +17,5 @@ module.exports = {
   DB_USERNAME,
   DB_PASSWORD,
   JWT_SECRET,
+  SESSION_SECRET,
 };

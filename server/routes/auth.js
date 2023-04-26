@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+const ensureAuth = require("../middleware/ensureAuth");
 
 router.route("/").get((req, res, next) => {
   res.send("auth endpoint");
@@ -100,7 +101,10 @@ triggered, which redirects the user to the Google OAuth consent screen with the 
 application's callback URL with an authorization code that can be exchanged for an access token. */
 router.get(
   "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
+  passport.authenticate("google", { scope: ["profile", "email"] }),
+  (req, res) => {
+    req.session.user = req.user;
+  }
 );
 
 /* This code is defining a route for handling the callback from Google OAuth authentication. When the
@@ -113,12 +117,21 @@ router.get(
   "/google/callback",
   passport.authenticate("google", {
     passReqToCallback: true,
-    session: false,
-    failureRedirect: "/",
+    failureRedirect: "http://localhost:3000/login",
+    successRedirect: "http://localhost:3000/googleSuccess",
   }),
   (req, res) => {
+    console.log(req.session.user);
+    res.locals.user = req.user;
     res.redirect("http://localhost:3000");
   }
 );
+
+/* This code is defining a GET route for "/user". When a GET request is made to this route, it sends a
+JSON response with the `req.user` object, which contains information about the authenticated user.
+This route is likely used to retrieve user information for use in the client-side application. */
+router.get("/user", (req, res) => {
+  res.status(200).json(req.user);
+});
 
 module.exports = router;

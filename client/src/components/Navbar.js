@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { BiHomeAlt2 } from "react-icons/bi";
 import { CgLogIn } from "react-icons/cg";
@@ -6,8 +6,13 @@ import { CgProfile } from "react-icons/cg";
 import "./css/Navbar.css";
 
 const Navbar = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user"));
+    setUser(userData);
+  }, [localStorage.getItem("user")]); 
+ 
   if (user) {
     return (
       <nav className="navbar navbar-expand navbar-white bg-white">
@@ -15,7 +20,7 @@ const Navbar = () => {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav mx-auto">
               <li className="nav-item">
-                <Link className="nav-link" to={`/users/${user.uid}`}>
+                <Link className="nav-link" to={`/users/${user._id}`}>
                   <CgProfile />
                 </Link>
               </li>

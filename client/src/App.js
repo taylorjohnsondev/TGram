@@ -15,6 +15,8 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="googleSuccess" element={<GoogleSuccess />} />
+
+        <Route path="/users/:_id" element={<Profile />} />
       </Routes>
 
       <Navbar />

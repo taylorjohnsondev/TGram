@@ -52,7 +52,7 @@ router.post("/register", async (req, res) => {
           .save()
           .then((user) => {
             res.status(200);
-            res.send({ token, username, uid: user.id });
+            res.send({ token, username, _id: user.id });
           })
           .catch((err) => {
             console.log(err);
@@ -91,7 +91,7 @@ router.post("/login", async (req, res) => {
   );
 
   res.status(200);
-  res.send({ token, username, uid: user.id });
+  res.send({ token, username, _id: user.id });
 });
 
 /* This code is defining a route for initiating the Google OAuth authentication process. When a user

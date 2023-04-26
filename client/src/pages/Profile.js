@@ -9,7 +9,7 @@ const Profile = () => {
 
   useEffect(() => {
     async function fetchUser() {
-      const response = await axios.get(`/api/users/${params.uid}`);
+      const response = await axios.get(`/api/users/${params._id}`); 
       setUser(response.data);
     }
     fetchUser();

@@ -35,10 +35,7 @@ const Register = () => {
       e.stopPropagation();
     }
     try {
-      const response = await axios.post(
-        "api/auth/register",
-        formData
-      );
+      const response = await axios.post("api/auth/register", formData);
       localStorage.setItem("user", JSON.stringify(response.data));
       navigate("/");
       navigate(0);
@@ -63,7 +60,9 @@ const Register = () => {
     if (response && response.data) {
       setUser(response.data);
 
-      localStorage.setItem("TGUser", JSON.stringify(response.data));
+      localStorage.setItem("user", JSON.stringify(response.data));
+      navigate("/");
+      navigate(0); 
     }
   };
 

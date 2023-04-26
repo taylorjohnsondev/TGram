@@ -12,9 +12,9 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:uid", async (req, res) => {
+router.get("/:_id", async (req, res) => {
   try {
-    User.findById(req.params.uid)
+    User.findById(req.params._id)
       .select("-password")
       .then((user) => {
         return res.status(200).json(user);
@@ -23,6 +23,6 @@ router.get("/:uid", async (req, res) => {
     console.log(err);
     res.status(404);
   }
-}); 
- 
+});
+
 module.exports = router;

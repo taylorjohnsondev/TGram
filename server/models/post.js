@@ -4,7 +4,7 @@ const { ObjectId } = mongoose.Schema.Types;
 const postSchema = new mongoose.Schema({
   file: {
     type: String,
-    default: "/test.png",
+    default: "",
   },
   text: {
     type: String,
@@ -14,6 +14,10 @@ const postSchema = new mongoose.Schema({
     type: ObjectId,
     ref: "User",
   },
+  time: {
+    type: Date,
+    default: Date.now,
+  }, 
 });
 
 module.exports = mongoose.model("Post", postSchema);

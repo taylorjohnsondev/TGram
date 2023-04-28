@@ -35,7 +35,7 @@ const Register = () => {
       e.stopPropagation();
     }
     try {
-      const response = await axios.post("api/auth/register", formData);
+      const response = await axios.post("/auth/register", formData); //the base url already contains /api
       localStorage.setItem("user", JSON.stringify(response.data));
       navigate("/");
       navigate(0);
@@ -62,7 +62,7 @@ const Register = () => {
 
       localStorage.setItem("user", JSON.stringify(response.data));
       navigate("/");
-      navigate(0); 
+      navigate(0);
     }
   };
 

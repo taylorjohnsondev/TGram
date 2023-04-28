@@ -19,6 +19,12 @@ const userSchema = new mongoose.Schema({
     type: String,
   },
   picture: { type: String, default: "/defaultpicture.png" },
+  posts: [
+    {
+      type: ObjectId,
+      ref: "Post",
+    },
+  ],
   googleId: {
     type: String,
   },

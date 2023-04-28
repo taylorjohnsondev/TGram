@@ -1,26 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
+import axios from "axios";
 
 const Homepage = () => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      const response = await axios.get("/api/posts");
+      setPosts(response.data);
+    }
+    fetchPosts();
+  }, []);
+
   return (
-    <> 
-      <div className="post-container">
-        <div className="username">Taylor Johnson</div>
-        <div className="username">@TaylorJohnson</div>
-        <div className="photo-container">
-          <img
-            src="https://www.rd.com/wp-content/uploads/2019/11/cat-10-e1573844975155.jpg"
-            alt="Post Media"
-            className="photo"
-          />
+    <div>
+      {posts.map((post) => (
+        <div key={post._id} className="post-container">
+          <div className="username">{post.author.username}</div>
+          <div className="photo-container">
+            <img src={post.file} alt="Post Media" className="photo" />
+            {post.text}
+          </div> 
+          <div className="description">{post.text}</div>
+          <div>
+            <AiOutlineHeart /> <FaRegComment />
+          </div>
         </div>
-        <div className="description">This is a test post of a cat</div>
-        <div>
-          <AiOutlineHeart /> <FaRegComment />
-        </div>
-      </div>
-    </>
+      ))}
+    </div>
   );
 };
 

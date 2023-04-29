@@ -25,6 +25,18 @@ const userSchema = new mongoose.Schema({
       ref: "Post",
     },
   ],
+  following: [
+    {
+      type: ObjectId,
+      ref: "User",
+    },
+  ],
+  followers: [
+    {
+      type: ObjectId,
+      ref: "User",
+    },
+  ],
   googleId: {
     type: String,
   },

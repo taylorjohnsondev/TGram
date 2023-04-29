@@ -6,6 +6,7 @@ module.exports = {
   ensureAuth: (req, res, next) => {
     if (req.isAuthenticated()) {
       req.app.locals.user = req.user;
+
       return next();
     } else {
       res.redirect("http://localhost:3000/login");

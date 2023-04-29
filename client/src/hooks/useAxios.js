@@ -9,4 +9,8 @@ export default axios.create({
   baseURL: API_URL,
 });
 
-//make a private axios instance here for protected api calls.
+export const axiosPrivate = axios.create({
+  baseURL: API_URL,
+  headers: { "Content-Type": "application/json" },
+  withCredentials: true,
+});

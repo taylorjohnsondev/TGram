@@ -3,7 +3,10 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Form } from "react-bootstrap";
-import axios from "axios";
+import axios from "../hooks/useAxios";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import Follow from "../components/Follow";
+import ShowFollowers from "../components/ShowFollowers";
 
 const Profile = () => {
   const params = useParams();
@@ -11,6 +14,9 @@ const Profile = () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const [posts, setPosts] = useState([]);
   const [form, setForm] = useState(false);
+  const [followers, setFollowers] = useState([]);
+
+  const axiosPrivate = useAxiosPrivate();
 
   const openForm = () => {
     setForm(true);
@@ -26,7 +32,7 @@ const Profile = () => {
     const text = formData.get("text");
     const post = { text };
     axios
-      .post(`/api/posts/${params._id}`, post)
+      .post(`/posts/${params._id}`, post)
       .then((response) => {
         setPosts([...posts, response.data]);
         setForm(false);
@@ -36,10 +42,24 @@ const Profile = () => {
       });
   };
 
+  const handleFollow = async () => {
+    const response = await axiosPrivate
+      .put(`/users/follow/${params._id}`)
+      .then((res) => {
+        const followers = res.data.userToUpdate.followers;
+        console.log(res);
+        setFollowers([...followers, followers]);
+        console.log(followers);
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     async function fetchUser() {
-      const userData = await axios.get(`/api/users/${params._id}`);
-      const postData = await axios.get(`/api/posts/${params._id}`);
+      const userData = await axios.get(`/users/${params._id}`);
+      const postData = await axios.get(`/posts/${params._id}`);
+
+      setFollowers(userData.data.followers);
       setUser(userData.data);
       setPosts(postData.data);
     }
@@ -48,6 +68,7 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
+      <Follow handleFollow={handleFollow} />
       <div className="profile-avatar">
         <img src={user.picture} alt="User Avatar" />
       </div>
@@ -98,6 +119,7 @@ const Profile = () => {
           ))}
         </div>
       )}
+      <ShowFollowers followers={followers} />
     </div>
   );
 };

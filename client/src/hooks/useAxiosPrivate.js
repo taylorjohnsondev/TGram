@@ -9,9 +9,14 @@ import { axiosPrivate } from "./useAxios";
 
 const useAxiosPrivate = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  const token = user.token;
 
+  const token = user?.token;
   useEffect(() => {
+    if (!token) {
+      console.error("no token found in local storage!");
+      return;
+    }
+
     const requestIntercept = axiosPrivate.interceptors.request.use(
       (config) => {
         if (!config.headers["Authorization"]) {

@@ -28,7 +28,7 @@ const Homepage = () => {
             <img src={post.file} alt="Post Media" className="photo" />
           </div>
           <div className="description">{post.text}</div>
-          <div>{new Date(post.time).toLocaleString()}</div> 
+          <div>{new Date(post.time).toLocaleString()}</div>
 
           <div>
             <AiOutlineHeart /> <FaRegComment />

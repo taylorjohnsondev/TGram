@@ -26,20 +26,21 @@ const Profile = () => {
     setForm(false);
   };
 
-  const handlePost = (event) => {
+  const handlePost = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const text = formData.get("text");
-    const post = { text };
-    axios
-      .post(`/posts/${params._id}`, post)
-      .then((response) => {
-        setPosts([...posts, response.data]);
-        setForm(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const file = formData.get("file");
+    const postData = new FormData();
+    postData.append("text", text);
+    postData.append("file", file);
+    try {
+      const response = await axios.post(`/posts/${params._id}`, postData);
+      setPosts([...posts, response.data]);
+      setForm(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleFollow = async () => {
@@ -83,7 +84,7 @@ const Profile = () => {
             </h1>
             {form && (
               <div className="profile-newpost-form">
-                <Form onSubmit={handlePost}>
+                <Form onSubmit={handlePost} encType="multipart/form-data">
                   <Form.Group controlId="formBasicText">
                     <Form.Label>Caption:</Form.Label>
                     <Form.Control as="textarea" name="text" />
@@ -115,7 +116,8 @@ const Profile = () => {
             <div className="profile-post" key={post._id}>
               <img src={post.file} alt="Post" />
               <div>{post.text}</div>
-            </div>
+              <div>{new Date(post.time).toLocaleString()}</div>
+            </div> 
           ))}
         </div>
       )}

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Post = require("../models/post");
 const User = require("../models/user");
+const fileupload = require("../middleware/fileUpload");
 
 router.get("/", async (req, res) => {
   try {
@@ -21,16 +22,17 @@ router.get("/:_id", async (req, res) => {
     res.json(posts);
   } catch (err) {
     console.error(err.message);
-    res.status(500); 
+    res.status(500);
   }
 });
 
-router.post("/:_id", async (req, res, next) => {
+router.post("/:_id", fileupload.single("file"), async (req, res, next) => {
   try {
     const { text } = req.body;
     const author = req.params._id;
+    const file = "/uploads/" + req.file.filename;
 
-    const post = await Post.create({ text, author });
+    const post = await Post.create({ file, text, author });
 
     const user = await User.findByIdAndUpdate(
       author,

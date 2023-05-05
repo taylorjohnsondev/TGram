@@ -35,7 +35,10 @@ const Profile = () => {
     postData.append("text", text);
     postData.append("file", file);
     try {
-      const response = await axios.post(`/posts/${params._id}`, postData);
+      const response = await axios.post(
+        `/posts/${params._id}`,
+        postData
+      );
       setPosts([...posts, response.data]);
       setForm(false);
     } catch (error) {
@@ -55,6 +58,17 @@ const Profile = () => {
       .catch((err) => console.log(err));
   };
 
+  //check if user has a photo from google
+  //if not use user.picture
+  //takes user object
+  const checkForGooglePic = (user) => {
+    if (user.googlePicture) {
+      return user.googlePicture;
+    } else {
+      return user.picture;
+    }
+  };
+
   useEffect(() => {
     async function fetchUser() {
       const userData = await axios.get(`/users/${params._id}`);
@@ -71,7 +85,7 @@ const Profile = () => {
     <div className="profile-container">
       <Follow handleFollow={handleFollow} />
       <div className="profile-avatar">
-        <img src={user.picture} alt="User Avatar" />
+        <img src={checkForGooglePic(user)} alt="User Avatar" />
       </div>
       <div className="profile-name">{user.nickname}</div>
       <div className="profile-username">{`${user.username}`}</div>
@@ -84,7 +98,10 @@ const Profile = () => {
             </h1>
             {form && (
               <div className="profile-newpost-form">
-                <Form onSubmit={handlePost} encType="multipart/form-data">
+                <Form
+                  onSubmit={handlePost}
+                  encType="multipart/form-data"
+                >
                   <Form.Group controlId="formBasicText">
                     <Form.Label>Caption:</Form.Label>
                     <Form.Control as="textarea" name="text" />
@@ -117,7 +134,7 @@ const Profile = () => {
               <img src={post.file} alt="Post" />
               <div>{post.text}</div>
               <div>{new Date(post.time).toLocaleString()}</div>
-            </div> 
+            </div>
           ))}
         </div>
       )}

@@ -115,15 +115,13 @@ about the authenticated user. The route then redirects the user to the homepage 
 at "http://localhost:3000". */
 router.get(
   "/google/callback",
-  passport.authenticate("google", {
-    passReqToCallback: true,
-    failureRedirect: "http://localhost:3000/login",
-    successRedirect: "http://localhost:3000/googleSuccess",
-  }),
+  passport.authenticate("google"),
   (req, res) => {
-    console.log(req.session.user);
-    res.locals.user = req.user;
-    res.redirect("http://localhost:3000");
+    const { user, token } = req.user;
+
+    res.redirect(
+      `http://localhost:3000/googleSuccess/?token=${token}`
+    );
   }
 );
 
@@ -131,6 +129,7 @@ router.get(
 JSON response with the `req.user` object, which contains information about the authenticated user.
 This route is likely used to retrieve user information for use in the client-side application. */
 router.get("/user", (req, res) => {
+  console.log(req.user);
   res.status(200).json(req.user);
 });
 

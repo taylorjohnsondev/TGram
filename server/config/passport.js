@@ -20,7 +20,7 @@ module.exports = function (passport) {
         const newUser = {
           googleId: profile.id,
           name: profile.displayName,
-          username: profile.emails[0].value,
+          username: profile.displayName,
           googlePicture: profile.photos[0].value,
           email: profile.emails[0].value,
         };
@@ -31,10 +31,26 @@ module.exports = function (passport) {
           });
 
           if (user) {
-            done(null, user);
+            const token = jwt.sign(
+              {
+                username: user.username,
+                id: user._id,
+              },
+              JWT_SECRET
+            );
+
+            done(null, { user, token });
           } else {
+            const token = jwt.sign(
+              {
+                username: profile.displayName,
+                id: profile.id,
+              },
+              process.env.JWT_SECRET
+            );
+
             user = await User.create(newUser);
-            done(null, user);
+            done(null, { user, token });
           }
         } catch (error) {
           console.log(error);
@@ -49,7 +65,7 @@ and a callback function `done`. The `done` function is called with two arguments
 is an error object (if any) and the second argument is the user's id. The user's id is then stored
 in the session. */
   passport.serializeUser((user, done) => {
-    done(null, user.id);
+    done(null, user.user._id);
   });
 
   /* `passport.deserializeUser` is a method provided by the Passport.js library that is used to

@@ -8,11 +8,18 @@ import { useEffect } from "react";
 import { axiosPrivate } from "./useAxios";
 
 const useAxiosPrivate = () => {
+  let token;
   const user = JSON.parse(localStorage.getItem("user"));
+  const googleUserToken = JSON.parse(localStorage.getItem("token"));
 
-  const token = user?.token;
+  if (googleUserToken) {
+    token = googleUserToken;
+  } else {
+    token = user?.token;
+  }
+
   useEffect(() => {
-    if (!token) {
+    if (!token || !googleUserToken) {
       console.error("no token found in local storage!");
       return;
     }

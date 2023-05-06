@@ -138,7 +138,7 @@ const Profile = () => {
           ))}
         </div>
       )}
-      <ShowFollowers followers={followers} />
+      <ShowFollowers followers={followers} key={followers._id} />
     </div>
   );
 };

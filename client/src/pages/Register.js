@@ -47,26 +47,6 @@ const Register = () => {
   };
 
   /**
-   * This function fetches the authenticated Google user's data and stores it in local storage.
-   */
-  const fetchGoogleUser = async () => {
-    const response = await axios
-      .get("/auth/user", { withCredentials: true })
-      .catch((err) => {
-        console.log("Not properly authenticated.");
-        console.log(err);
-      });
-
-    if (response && response.data) {
-      setUser(response.data);
-
-      localStorage.setItem("user", JSON.stringify(response.data));
-      navigate("/");
-      navigate(0);
-    }
-  };
-
-  /**
    * This function handles the Google login process by opening a new window and checking if it has been
    * closed to authenticate the user and fetch their information.
    * @param e - The "e" parameter is an event object that is passed to the function when it is
@@ -75,35 +55,19 @@ const Register = () => {
    */
   const handleGoogleLogIn = async (e) => {
     e.preventDefault();
-    let timer;
 
     try {
-      // Open the Google Login URL
-      const newWindow = window.open(
-        `http://localhost:3001${API_URL}/auth/google`,
-        "_blank",
-        "width=500,height=600"
-      );
-
-      if (newWindow) {
-        timer = setInterval(() => {
-          if (newWindow.closed) {
-            console.log("Authenticated with Google");
-            fetchGoogleUser();
-
-            if (timer) {
-              clearInterval(timer);
-            }
-          }
-        }, 500);
-      }
+      // Redirect the user to the Google Login URL
+      window.location.href = `http://localhost:3001${API_URL}/auth/google`;
     } catch (error) {
       console.log(error);
     }
   };
 
   function handleLogout() {
-    localStorage.clear();
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+
     navigate("/");
     navigate(0);
   }

@@ -16,11 +16,8 @@ require("./config/passport")(passport);
 
 const app = express();
 
-app.use(function (req, res, next) {
-  res.locals.currentUser = req.user;
-  next();
-});
-
+//Passport.js Middleware
+app.use(passport.initialize());
 app.use(
   session({
     secret: SESSION_SECRET,
@@ -34,16 +31,19 @@ app.use(
     },
   })
 );
+app.use(passport.session());
+
+app.use(function (req, res, next) {
+  res.locals.currentUser = req.user;
+
+  next();
+});
 
 /* These lines of code are setting up middleware for the Express application: */
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors());
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
-//Passport.js Middleware
-app.use(passport.initialize());
-app.use(passport.session());
 
 //routes
 app.use("/api", require("./routes/index"));

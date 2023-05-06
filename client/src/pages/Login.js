@@ -32,18 +32,16 @@ const Login = () => {
       e.stopPropagation();
     }
     try {
-     const response = await axios.post("api/auth/login", formData);
+      const response = await axios.post("api/auth/login", formData);
       localStorage.setItem("user", JSON.stringify(response.data));
       navigate("/");
-      navigate(0); 
+      navigate(0);
     } catch (error) {
       console.log(error);
     }
 
     setValidated(true);
   };
-
-  console.log(formData);
 
   function handleLogout() {
     localStorage.clear();
@@ -60,10 +58,10 @@ const Login = () => {
           <Button className="logout-btn" onClick={handleLogout}>
             Log out
           </Button>
-        </div> 
+        </div>
       </div>
     );
-  } 
+  }
 
   return (
     <>
@@ -72,7 +70,9 @@ const Login = () => {
         <Form.Group className="mb-3" controlId="formBasicUsername">
           <Form.Label>Username</Form.Label>
           <InputGroup hasValidation>
-            <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
+            <InputGroup.Text id="inputGroupPrepend">
+              @
+            </InputGroup.Text>
             <Form.Control
               required
               type="text"
@@ -112,7 +112,9 @@ const Login = () => {
       <br />
       Don't have an account?
       <br />
-      <Button onClick={() => navigate("/register")}>Register here</Button>
+      <Button onClick={() => navigate("/register")}>
+        Register here
+      </Button>
     </>
   );
 };

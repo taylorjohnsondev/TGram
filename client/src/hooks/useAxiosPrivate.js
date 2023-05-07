@@ -19,11 +19,6 @@ const useAxiosPrivate = () => {
   }
 
   useEffect(() => {
-    if (!token || !googleUserToken) {
-      console.error("no token found in local storage!");
-      return;
-    }
-
     const requestIntercept = axiosPrivate.interceptors.request.use(
       (config) => {
         if (!config.headers["Authorization"]) {

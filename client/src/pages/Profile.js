@@ -7,6 +7,8 @@ import axios from "../hooks/useAxios";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import Follow from "../components/Follow";
 import ShowFollowers from "../components/ShowFollowers";
+import { AiOutlineHeart } from "react-icons/ai";
+import { FaRegComment } from "react-icons/fa";
 
 const Profile = () => {
   const params = useParams();
@@ -35,10 +37,7 @@ const Profile = () => {
     postData.append("text", text);
     postData.append("file", file);
     try {
-      const response = await axios.post(
-        `/posts/${params._id}`,
-        postData
-      );
+      const response = await axios.post(`/posts/${params._id}`, postData);
       setPosts([...posts, response.data]);
       setForm(false);
     } catch (error) {
@@ -47,7 +46,7 @@ const Profile = () => {
   };
 
   const handleFollow = async () => {
-    const response = await axiosPrivate
+    await axiosPrivate
       .put(`/users/follow/${params._id}`)
       .then((res) => {
         const followers = res.data.userToUpdate.followers;
@@ -83,7 +82,6 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-      <Follow handleFollow={handleFollow} />
       <div className="profile-avatar">
         <img src={checkForGooglePic(user)} alt="User Avatar" />
       </div>
@@ -98,10 +96,7 @@ const Profile = () => {
             </h1>
             {form && (
               <div className="profile-newpost-form">
-                <Form
-                  onSubmit={handlePost}
-                  encType="multipart/form-data"
-                >
+                <Form onSubmit={handlePost} encType="multipart/form-data">
                   <Form.Group controlId="formBasicText">
                     <Form.Label>Caption:</Form.Label>
                     <Form.Control as="textarea" name="text" />
@@ -127,18 +122,28 @@ const Profile = () => {
           </div>
         </div>
       ) : (
-        <div className="profile-posts">
-          <h1 className="profile-h1">Posts</h1>
-          {posts.map((post) => (
-            <div className="profile-post" key={post._id}>
-              <img src={post.file} alt="Post" />
-              <div>{post.text}</div>
-              <div>{new Date(post.time).toLocaleString()}</div>
-            </div>
-          ))}
+        <div className="follow">
+          <div>
+          <Follow handleFollow={handleFollow} />
+</div>
+          <div className="profile-posts">
+            <h1 className="profile-h1">Posts</h1>
+            {posts.map((post) => (
+              <div className="profile-post" key={post._id}>
+                <img src={post.file} alt="Post" />
+                <div>{post.text}</div>
+                <div>{new Date(post.time).toLocaleString()}</div>
+                <div>
+                  <AiOutlineHeart /> <FaRegComment />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
-      <ShowFollowers followers={followers} key={followers._id} />
+      <div className="followers">
+        <ShowFollowers followers={followers} key={followers._id} />
+      </div>
     </div>
   );
 };

@@ -24,18 +24,18 @@ code {
   max-width: 45%;
   margin: 0 auto;
 }
-
-.photo-container {
-  max-height: 50rem;
+.posts-container {
+  margin-bottom: 6rem;
 }
 
 .photo {
   width: 100%;
   height: auto;
   object-fit: contain;
-  border: 2px solid black;
 }
-
+.username {
+  text-align: center;
+}
 @media only screen and (max-width: 600px) {
   .post-container {
     max-width: 80%;
@@ -89,7 +89,9 @@ code {
   font-size: 1rem;
   margin-bottom: 5px;
 }
-
+.follow{
+  text-align: center;
+}
 .profile-bio {
   font-size: 0.9rem;
   text-align: center;
@@ -106,10 +108,14 @@ code {
   object-fit: cover;
   border: 1px solid black;
 }
-
+ 
 .profile-post {
   max-width: 40rem;
   height: 100%;
   object-fit: cover;
-  border: 1px solid black;
+  padding-bottom: 5rem;
+}
+
+.followers {
+  margin-bottom: 10rem;
 }

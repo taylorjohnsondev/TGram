@@ -4,9 +4,11 @@ import { FaRegComment } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
+
 const Homepage = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
+  const storedUser = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     async function fetchPosts() {
@@ -17,13 +19,21 @@ const Homepage = () => {
   }, []);
 
   return (
-    <div>
+    <div className="posts-container">
+      {storedUser ? (
+        <div className="username">{"Welcome " + storedUser.username}</div>
+      ) : (
+        <div className="username">
+          Welcome to TGram! Have an account?
+          <Button onClick={() => navigate("/login")}>Login</Button>
+        </div>
+      )}
       {posts.map((post) => (
         <div key={post._id} className="post-container">
           <div className="username">{post.author.username}</div>
           <Button onClick={() => navigate(`users/${post.author._id}`)}>
             Profile
-          </Button>
+          </Button> 
           <div className="photo-container">
             <img src={post.file} alt="Post Media" className="photo" />
           </div>

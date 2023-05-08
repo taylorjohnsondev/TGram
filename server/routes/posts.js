@@ -6,7 +6,10 @@ const fileupload = require("../middleware/fileUpload");
 
 router.get("/", async (req, res) => {
   try {
-    const posts = await Post.find().populate("author", "username picture");
+    const posts = await Post.find().populate(
+      "author",
+      "username picture"
+    );
     res.json(posts);
   } catch (err) {
     console.error(err);
@@ -16,9 +19,9 @@ router.get("/", async (req, res) => {
 
 router.get("/:_id", async (req, res) => {
   try {
-    const posts = await Post.find({ author: req.params._id }).populate(
-      "author"
-    );
+    const posts = await Post.find({
+      author: req.params._id,
+    }).populate("author");
     res.json(posts);
   } catch (err) {
     console.error(err.message);
@@ -26,21 +29,62 @@ router.get("/:_id", async (req, res) => {
   }
 });
 
-router.post("/:_id", fileupload.single("file"), async (req, res, next) => {
+router.post(
+  "/:_id",
+  fileupload.single("file"),
+  async (req, res, next) => {
+    try {
+      const { text } = req.body;
+      const author = req.params._id;
+      const file = "/uploads/" + req.file.filename;
+
+      const post = await Post.create({ file, text, author });
+
+      const user = await User.findByIdAndUpdate(
+        author,
+        { $push: { posts: post } },
+        { new: true }
+      );
+
+      res.status(201).json(post);
+    } catch (err) {
+      console.error(err);
+      res.status(500);
+    }
+  }
+);
+
+/* This code block is defining a PUT route for liking a post. It takes in the post ID as a parameter in
+the URL and the user ID in the request body. It then uses `Post.findByIdAndUpdate()` to find the
+post by ID and update its `likes` array by adding the user ID to it using ``. The `{ new:
+true }` option is used to return the updated post after the update operation. The `populate()`
+method is used to populate the `likes` field with the user objects. Finally, the updated post is
+sent as a response with a status code of 200. If there is an error, it logs the error and sends a
+status code of 500. */
+router.put("/like/:post_id", async (req, res) => {
+  const { post_id } = req.params;
+  const { user_id } = req.body;
+
   try {
-    const { text } = req.body;
-    const author = req.params._id;
-    const file = "/uploads/" + req.file.filename;
-
-    const post = await Post.create({ file, text, author });
-
-    const user = await User.findByIdAndUpdate(
-      author,
-      { $push: { posts: post } },
+    await Post.findByIdAndUpdate(
+      post_id,
+      {
+        $addToSet: { likes: user_id }, /*$/* `addToSet` is a MongoDB operator used in the `update`
+        parameter of `findByIdAndUpdate()` method. It adds a value
+        to an array field only if the value is not already present
+        in the array. In the context of this code block, it is
+        used to add the `user_id` to the `likes` array of a post
+        only if the `user_id` is not already present in the array. */
+       
+      },
       { new: true }
-    );
-
-    res.status(201).json(post);
+    )
+      .populate("likes", "-_id email username")
+      .then((updatedPost) => {
+        res.status(200).json({updatedPost})
+      }).catch((err) => {
+        return res.status(500).json({error: "something went wrong."})
+      })
   } catch (err) {
     console.error(err);
     res.status(500);

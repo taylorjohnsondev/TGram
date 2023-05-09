@@ -6,10 +6,9 @@ const fileupload = require("../middleware/fileUpload");
 
 router.get("/", async (req, res) => {
   try {
-    const posts = await Post.find().populate(
-      "author",
-      "username picture"
-    );
+    const posts = await Post.find()
+      .populate("author", "username picture")
+      .sort({ time: -1 });
     res.json(posts);
   } catch (err) {
     console.error(err);
@@ -29,30 +28,26 @@ router.get("/:_id", async (req, res) => {
   }
 });
 
-router.post(
-  "/:_id",
-  fileupload.single("file"),
-  async (req, res, next) => {
-    try {
-      const { text } = req.body;
-      const author = req.params._id;
-      const file = "/uploads/" + req.file.filename;
+router.post("/:_id", fileupload.single("file"), async (req, res, next) => {
+  try {
+    const { text } = req.body;
+    const author = req.params._id;
+    const file = "/uploads/" + req.file.filename;
 
-      const post = await Post.create({ file, text, author });
+    const post = await Post.create({ file, text, author });
 
-      const user = await User.findByIdAndUpdate(
-        author,
-        { $push: { posts: post } },
-        { new: true }
-      );
+    const user = await User.findByIdAndUpdate(
+      author,
+      { $push: { posts: post } },
+      { new: true }
+    );
 
-      res.status(201).json(post);
-    } catch (err) {
-      console.error(err);
-      res.status(500);
-    }
+    res.status(201).json(post);
+  } catch (err) {
+    console.error(err);
+    res.status(500);
   }
-);
+});
 
 /* This code block is defining a PUT route for liking a post. It takes in the post ID as a parameter in
 the URL and the user ID in the request body. It then uses `Post.findByIdAndUpdate()` to find the
@@ -69,22 +64,24 @@ router.put("/like/:post_id", async (req, res) => {
     await Post.findByIdAndUpdate(
       post_id,
       {
-        $addToSet: { likes: user_id }, /*$/* `addToSet` is a MongoDB operator used in the `update`
+        $addToSet: {
+          likes: user_id,
+        } /*$/* `addToSet` is a MongoDB operator used in the `update`
         parameter of `findByIdAndUpdate()` method. It adds a value
         to an array field only if the value is not already present
         in the array. In the context of this code block, it is
         used to add the `user_id` to the `likes` array of a post
-        only if the `user_id` is not already present in the array. */
-       
+        only if the `user_id` is not already present in the array. */,
       },
       { new: true }
     )
       .populate("likes", "-_id email username")
       .then((updatedPost) => {
-        res.status(200).json({updatedPost})
-      }).catch((err) => {
-        return res.status(500).json({error: "something went wrong."})
+        res.status(200).json({ updatedPost });
       })
+      .catch((err) => {
+        return res.status(500).json({ error: "something went wrong." });
+      });
   } catch (err) {
     console.error(err);
     res.status(500);

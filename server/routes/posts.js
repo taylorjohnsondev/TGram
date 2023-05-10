@@ -28,26 +28,30 @@ router.get("/:_id", async (req, res) => {
   }
 });
 
-router.post("/:_id", fileupload.single("file"), async (req, res, next) => {
-  try {
-    const { text } = req.body;
-    const author = req.params._id;
-    const file = "/uploads/" + req.file.filename;
+router.post(
+  "/:_id",
+  fileupload.single("file"),
+  async (req, res, next) => {
+    try {
+      const { text } = req.body;
+      const author = req.params._id;
+      const file = "/uploads/" + req.file.filename;
 
-    const post = await Post.create({ file, text, author });
+      const post = await Post.create({ file, text, author });
 
-    const user = await User.findByIdAndUpdate(
-      author,
-      { $push: { posts: post } },
-      { new: true }
-    );
+      const user = await User.findByIdAndUpdate(
+        author,
+        { $push: { posts: post } },
+        { new: true }
+      );
 
-    res.status(201).json(post);
-  } catch (err) {
-    console.error(err);
-    res.status(500);
+      res.status(201).json(post);
+    } catch (err) {
+      console.error(err);
+      res.status(500);
+    }
   }
-});
+);
 
 /* This code block is defining a PUT route for liking a post. It takes in the post ID as a parameter in
 the URL and the user ID in the request body. It then uses `Post.findByIdAndUpdate()` to find the
@@ -80,12 +84,59 @@ router.put("/like/:post_id", async (req, res) => {
         res.status(200).json({ updatedPost });
       })
       .catch((err) => {
-        return res.status(500).json({ error: "something went wrong." });
+        return res
+          .status(500)
+          .json({ error: "something went wrong." });
       });
   } catch (err) {
     console.error(err);
     res.status(500);
   }
 });
+
+/**
+ *@method:POST
+ *@requires:post id
+ *@route: http://localhost:3001/api/posts/comment/:_id
+ 
+*/
+router.put(
+  "/comment/:_id",
+
+  async (req, res, next) => {
+    const { _id } = req.params;
+    const { text, user_id } = req.body;
+    console.log(_id);
+
+    const comment = {
+      text: text,
+      author: user_id,
+    };
+    try {
+      await Post.findByIdAndUpdate(
+        _id,
+        {
+          $push: {
+            comments: comment,
+          },
+        },
+        { new: true }
+      )
+        .populate({
+          path: "comments.author",
+          select: ["username", "picture", "googlePicture"],
+        })
+        .then((updatedPost) => {
+          res.status(200).json({ updatedPost });
+        })
+        .catch((err) => {
+          return res.status(500).json({ error: err });
+        });
+    } catch (err) {
+      console.error(err);
+      res.status(500);
+    }
+  }
+);
 
 module.exports = router;

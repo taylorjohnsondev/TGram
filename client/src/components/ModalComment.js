@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
@@ -24,9 +24,7 @@ function ModalComment({
           <Modal.Title>Leave a comment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form
-            onSubmit={(event) => handleCommentSubmit(event, post)}
-          >
+          <Form onSubmit={(event) => handleCommentSubmit(event, post)}>
             <Form.Group
               className="mb-3"
               controlId="exampleForm.ControlTextarea1"
@@ -39,7 +37,7 @@ function ModalComment({
                 onChange={handleCommentInput}
               />
             </Form.Group>
-            <Button type="submit" variant="primary">
+            <Button type="submit" variant="primary" onClick={handleClose}>
               Post Comment
             </Button>
           </Form>

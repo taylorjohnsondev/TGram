@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { AiOutlineHeart } from "react-icons/ai";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import ModalComment from "../components/ModalComment";
 import ShowComments from "../components/ShowComments";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import Post from "../components/Post";
 
 const initialComment = { text: "" };
 
@@ -13,19 +12,16 @@ const Homepage = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [comment, setComment] = useState(initialComment);
-  const [show, setShow] = useState(false);
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const axiosPrivate = useAxiosPrivate();
-
-  const handleClose = () => setShow(false);
-
+ 
   useEffect(() => {
     async function fetchPosts() {
       const response = await axios.get("/api/posts");
       setPosts(response.data);
     }
     fetchPosts();
-  }, []);
+  }, [comment]);
 
   const handleLike = async (postId) => {
     const req = { user_id: storedUser._id };
@@ -58,7 +54,6 @@ const Homepage = () => {
       .then((res) => {
         console.log(res.data);
         setComment(initialComment);
-        setShow(false);
       })
       .catch((err) => console.log(err));
   };
@@ -66,9 +61,7 @@ const Homepage = () => {
   return (
     <div className="posts-container">
       {storedUser ? (
-        <div className="username">
-          {"Welcome " + storedUser.username}
-        </div>
+        <div className="username">{"Welcome " + storedUser.username}</div>
       ) : (
         <div className="username">
           Welcome to TGram! Have an account?
@@ -77,38 +70,13 @@ const Homepage = () => {
       )}
       {posts.map((post) => (
         <>
-          <div key={post._id} className="post-container">
-            <div className="username">{post.author.username}</div>
-            <Button
-              onClick={() => navigate(`users/${post.author._id}`)}
-            >
-              Profile
-            </Button>
-            <div className="photo-container">
-              <img
-                src={post.file}
-                alt="Post Media"
-                className="photo"
-              />
-            </div>
-            <div className="description">{post.text}</div>
-            <div>{new Date(post.time).toLocaleString()}</div>
-
-            <div onClick={() => handleLike(post._id)}>
-              <AiOutlineHeart />
-              {post.likes.length}
-            </div>
-
-            <ModalComment
-              handleCommentInput={handleCommentInput}
-              comment={comment}
-              handleCommentSubmit={handleCommentSubmit}
-              post={post._id}
-              setShow={setShow}
-              show={show}
-              handleClose={handleClose}
-            />
-          </div>
+          <Post
+            post={post}
+            handleLike={handleLike}
+            handleCommentInput={handleCommentInput}
+            comment={comment}
+            handleCommentSubmit={handleCommentSubmit}
+          />
           <ShowComments post={post} />
         </>
       ))}

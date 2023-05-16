@@ -14,7 +14,7 @@ const Homepage = () => {
   const [comment, setComment] = useState(initialComment);
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const axiosPrivate = useAxiosPrivate();
- 
+
   useEffect(() => {
     async function fetchPosts() {
       const response = await axios.get("/api/posts");
@@ -34,11 +34,9 @@ const Homepage = () => {
   };
 
   const handleCommentInput = (event) => {
-    console.log(event.currentTarget);
     setComment({
       text: event.target.value,
     });
-    console.log(comment);
   };
 
   const handleCommentSubmit = async (event, postId) => {
@@ -61,7 +59,9 @@ const Homepage = () => {
   return (
     <div className="posts-container">
       {storedUser ? (
-        <div className="username">{"Welcome " + storedUser.username}</div>
+        <div className="username">
+          {"Welcome " + storedUser.username}
+        </div>
       ) : (
         <div className="username">
           Welcome to TGram! Have an account?

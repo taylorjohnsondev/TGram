@@ -1,0 +1,24 @@
+.container {
+  border: 2px solid gray;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+}
+
+.title {
+  font-weight: 500;
+  font-size: medium;
+}
+
+.container > ul {
+  list-style-type: none;
+}
+
+.Link {
+  color: teal;
+  text-decoration: none;
+}
+
+li {
+  margin-left: 1px;
+}

@@ -5,9 +5,25 @@ const User = require("../models/user");
 const fileupload = require("../middleware/fileUpload");
 
 router.get("/", async (req, res) => {
+  const populateQuery = [
+    { path: "author", select: ["username", "picture"] },
+    {
+      path: "comments",
+      populate: {
+        path: "author",
+        select: ["username", "picture", "googlePicture", "created"],
+      },
+    },
+    {
+      path: "likes",
+      populate: "username",
+      select: ["picture", "googlePicture"],
+    },
+  ];
+
   try {
     const posts = await Post.find()
-      .populate("author", "username picture")
+      .populate(populateQuery)
       .sort({ time: -1 });
     res.json(posts);
   } catch (err) {

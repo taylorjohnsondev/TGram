@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ModalComment from "./ModalComment";
+import ShowComments from "./ShowComments";
 import { AiOutlineHeart } from "react-icons/ai";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -41,6 +42,7 @@ const Post = ({
             post={post._id}
           />
         </div>
+        <ShowComments post={post} />
       </div>
     </>
   );

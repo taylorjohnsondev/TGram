@@ -72,12 +72,12 @@ const Homepage = () => {
         <>
           <Post
             post={post}
+            key={post._id}
             handleLike={handleLike}
             handleCommentInput={handleCommentInput}
             comment={comment}
             handleCommentSubmit={handleCommentSubmit}
           />
-          <ShowComments post={post} />
         </>
       ))}
     </div>

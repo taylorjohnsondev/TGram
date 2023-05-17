@@ -16,6 +16,7 @@ const Profile = () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const [posts, setPosts] = useState([]);
   const [form, setForm] = useState(false);
+  const [error, setError] = useState(false);
   const [followers, setFollowers] = useState([]);
 
   const axiosPrivate = useAxiosPrivate();
@@ -37,7 +38,10 @@ const Profile = () => {
     postData.append("text", text);
     postData.append("file", file);
     try {
-      const response = await axios.post(`/posts/${params._id}`, postData);
+      const response = await axios.post(
+        `/posts/${params._id}`,
+        postData
+      );
       setPosts([...posts, response.data]);
       setForm(false);
     } catch (error) {
@@ -54,7 +58,10 @@ const Profile = () => {
         setFollowers([...followers, followers]);
         console.log(followers);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setError(err.response.data.error);
+      });
   };
 
   //check if user has a photo from google
@@ -96,7 +103,10 @@ const Profile = () => {
             </h1>
             {form && (
               <div className="profile-newpost-form">
-                <Form onSubmit={handlePost} encType="multipart/form-data">
+                <Form
+                  onSubmit={handlePost}
+                  encType="multipart/form-data"
+                >
                   <Form.Group controlId="formBasicText">
                     <Form.Label>Caption:</Form.Label>
                     <Form.Control as="textarea" name="text" />
@@ -124,8 +134,8 @@ const Profile = () => {
       ) : (
         <div className="follow">
           <div>
-          <Follow handleFollow={handleFollow} />
-</div>
+            <Follow handleFollow={handleFollow} error={error} />
+          </div>
           <div className="profile-posts">
             <h1 className="profile-h1">Posts</h1>
             {posts.map((post) => (

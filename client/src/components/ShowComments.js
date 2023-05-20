@@ -18,8 +18,11 @@ const ShowComments = ({ post }) => {
                 margin: "3px",
                 borderRadius: "50px",
               }}
-            /> 
-            <Link to={`/users/${comment.author._id}`} className="Link">
+            />
+            <Link
+              to={`/users/${comment.author._id}`}
+              className="Link"
+            >
               @{comment.author.username}
             </Link>
           </Card.Header>

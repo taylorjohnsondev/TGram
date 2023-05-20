@@ -3,7 +3,7 @@ import { Form, Button, InputGroup } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = ({ handleGoogleLogIn }) => {
   const navigate = useNavigate();
 
   const initialState = {
@@ -115,6 +115,19 @@ const Login = () => {
       <Button onClick={() => navigate("/register")}>
         Register here
       </Button>
+      <div>
+        or{" "}
+        <div
+          id="gSignInWrapper"
+          onClick={(e) => handleGoogleLogIn(e)}
+        >
+          <span class="label">Sign in with:</span>
+          <div id="customBtn" class="customGPlusSignIn">
+            <span class="icon"></span>
+            <span class="buttonText">Google</span>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

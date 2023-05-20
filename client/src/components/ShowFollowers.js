@@ -9,7 +9,7 @@ const ShowFollowers = ({ followers }) => {
         followers.map((follower) => (
           <ul key={follower._id}>
             <Link to={`/users/${follower._id}`} className="Link">
-              <li>@{follower.username}</li>
+              <li key={follower._id}>@{follower.username}</li>
             </Link>
           </ul>
         ))}

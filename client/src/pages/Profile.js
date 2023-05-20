@@ -39,7 +39,10 @@ const Profile = () => {
     postData.append("text", text);
     postData.append("file", file);
     try {
-      const response = await axios.post(`/posts/${params._id}`, postData);
+      const response = await axios.post(
+        `/posts/${params._id}`,
+        postData
+      );
       setPosts([...posts, response.data]);
       setForm(false);
     } catch (error) {
@@ -134,7 +137,10 @@ const Profile = () => {
             </h1>
             {form && (
               <div className="profile-newpost-form">
-                <Form onSubmit={handlePost} encType="multipart/form-data">
+                <Form
+                  onSubmit={handlePost}
+                  encType="multipart/form-data"
+                >
                   <Form.Group controlId="formBasicText">
                     <Form.Label>Caption:</Form.Label>
                     <Form.Control as="textarea" name="text" />

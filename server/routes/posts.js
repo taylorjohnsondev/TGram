@@ -4,23 +4,23 @@ const Post = require("../models/post");
 const User = require("../models/user");
 const fileupload = require("../middleware/fileUpload");
 
-router.get("/", async (req, res) => {
-  const populateQuery = [
-    { path: "author", select: ["username", "picture"] },
-    {
-      path: "comments",
-      populate: {
-        path: "author",
-        select: ["username", "picture", "googlePicture", "created"],
-      },
+const populateQuery = [
+  { path: "author", select: ["username", "picture"] },
+  {
+    path: "comments",
+    populate: {
+      path: "author",
+      select: ["username", "picture", "googlePicture", "created"],
     },
-    {
-      path: "likes",
-      populate: "username",
-      select: ["picture", "googlePicture"],
-    },
-  ];
+  },
+  {
+    path: "likes",
+    populate: "username",
+    select: ["picture", "googlePicture"],
+  },
+];
 
+router.get("/", async (req, res) => {
   try {
     const posts = await Post.find()
       .populate(populateQuery)
@@ -36,7 +36,7 @@ router.get("/:_id", async (req, res) => {
   try {
     const posts = await Post.find({
       author: req.params._id,
-    }).populate("author");
+    }).populate(populateQuery);
     res.json(posts);
   } catch (err) {
     console.error(err.message);

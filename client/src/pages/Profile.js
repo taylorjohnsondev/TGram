@@ -7,19 +7,20 @@ import axios from "../hooks/useAxios";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import Follow from "../components/Follow";
 import ShowFollowers from "../components/ShowFollowers";
-import { AiOutlineHeart } from "react-icons/ai";
-import { FaRegComment } from "react-icons/fa";
+import Post from "../components/Post";
+
+const initialComment = { text: "" };
 
 const Profile = () => {
   const params = useParams();
   const [user, setUser] = useState([]);
-  const storedUser = JSON.parse(localStorage.getItem("user"));
   const [posts, setPosts] = useState([]);
   const [form, setForm] = useState(false);
   const [error, setError] = useState(false);
   const [followers, setFollowers] = useState([]);
-
+  const [comment, setComment] = useState(initialComment);
   const axiosPrivate = useAxiosPrivate();
+  const storedUser = JSON.parse(localStorage.getItem("user"));
 
   const openForm = () => {
     setForm(true);
@@ -38,10 +39,7 @@ const Profile = () => {
     postData.append("text", text);
     postData.append("file", file);
     try {
-      const response = await axios.post(
-        `/posts/${params._id}`,
-        postData
-      );
+      const response = await axios.post(`/posts/${params._id}`, postData);
       setPosts([...posts, response.data]);
       setForm(false);
     } catch (error) {
@@ -85,7 +83,40 @@ const Profile = () => {
       setPosts(postData.data);
     }
     fetchUser();
-  }, [params._id, posts.length]);
+  }, [params._id, posts.length, comment]);
+
+  const handleLike = async (postId) => {
+    const req = { user_id: storedUser._id };
+    await axiosPrivate
+      .put(`/posts/like/${postId}`, req)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleCommentInput = (event) => {
+    setComment({
+      text: event.target.value,
+    });
+  };
+
+  const handleCommentSubmit = async (event, postId) => {
+    event.preventDefault();
+
+    console.log(event);
+
+    await axiosPrivate
+      .put(`posts/comment/${postId}`, {
+        text: comment.text,
+        user_id: storedUser._id,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setComment(initialComment);
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div className="profile-container">
@@ -97,16 +128,13 @@ const Profile = () => {
 
       {storedUser && storedUser._id === params._id ? (
         <div>
-          <div className="profile-posts">
+          <div className="posts-container">
             <h1 className="profile-newpost" onClick={openForm}>
               <AiOutlinePlusCircle />
             </h1>
             {form && (
               <div className="profile-newpost-form">
-                <Form
-                  onSubmit={handlePost}
-                  encType="multipart/form-data"
-                >
+                <Form onSubmit={handlePost} encType="multipart/form-data">
                   <Form.Group controlId="formBasicText">
                     <Form.Label>Caption:</Form.Label>
                     <Form.Control as="textarea" name="text" />
@@ -123,11 +151,16 @@ const Profile = () => {
               </div>
             )}
             {posts.map((post) => (
-              <div className="profile-post" key={post._id}>
-                <img src={post.file} alt="Post" />
-                <div>{post.text}</div>
-                <div>{new Date(post.time).toLocaleString()}</div>
-              </div>
+              <>
+                <Post
+                  post={post}
+                  key={post._id}
+                  handleLike={handleLike}
+                  handleCommentInput={handleCommentInput}
+                  comment={comment}
+                  handleCommentSubmit={handleCommentSubmit}
+                />
+              </>
             ))}
           </div>
         </div>
@@ -139,14 +172,16 @@ const Profile = () => {
           <div className="profile-posts">
             <h1 className="profile-h1">Posts</h1>
             {posts.map((post) => (
-              <div className="profile-post" key={post._id}>
-                <img src={post.file} alt="Post" />
-                <div>{post.text}</div>
-                <div>{new Date(post.time).toLocaleString()}</div>
-                <div>
-                  <AiOutlineHeart /> <FaRegComment />
-                </div>
-              </div>
+              <>
+                <Post
+                  post={post}
+                  key={post._id}
+                  handleLike={handleLike}
+                  handleCommentInput={handleCommentInput}
+                  comment={comment}
+                  handleCommentSubmit={handleCommentSubmit}
+                />
+              </>
             ))}
           </div>
         </div>

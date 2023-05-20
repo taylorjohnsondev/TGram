@@ -5,7 +5,7 @@ const ShowComments = ({ post }) => {
   return (
     <div>
       {post.comments.map((comment) => (
-        <Card style={{ width: "18rem" }} key={post.comments._id}>
+        <Card style={{ width: "18rem" }} key={comment._id}>
           <Card.Header style={{ textAlign: "center" }}>
             <Card.Img
               src={
@@ -18,11 +18,8 @@ const ShowComments = ({ post }) => {
                 margin: "3px",
                 borderRadius: "50px",
               }}
-            />
-            <Link
-              to={`/users/${comment.author._id}`}
-              className="Link"
-            >
+            /> 
+            <Link to={`/users/${comment.author._id}`} className="Link">
               @{comment.author.username}
             </Link>
           </Card.Header>

@@ -3,7 +3,7 @@ import ModalComment from "./ModalComment";
 import ShowComments from "./ShowComments";
 import { AiOutlineHeart } from "react-icons/ai";
 import { Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Post = ({
   post,
@@ -14,14 +14,18 @@ const Post = ({
 }) => {
   const [showCommentModal, setShowCommentModal] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
 
   return (
     <>
       <div key={post._id} className="post-container">
         <div className="username">{post.author.username}</div>
-        <Button onClick={() => navigate(`users/${post.author._id}`)}>
-          Profile
-        </Button>
+        {isHomePage && (
+          <Button onClick={() => navigate(`users/${post.author._id}`)}>
+            Profile
+          </Button>
+        )}
         <div className="photo-container">
           <img src={post.file} alt="Post Media" className="photo" />
         </div>

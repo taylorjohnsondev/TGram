@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import ModalComment from "./ModalComment";
 import ShowComments from "./ShowComments";
 import { AiOutlineHeart } from "react-icons/ai";
-import { Button } from "react-bootstrap";
+import { Button, Toast } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Post = ({
   post,
@@ -11,6 +12,7 @@ const Post = ({
   handleCommentInput,
   comment,
   handleCommentSubmit,
+  error,
 }) => {
   const [showCommentModal, setShowCommentModal] = useState(false);
   const navigate = useNavigate();
@@ -22,7 +24,9 @@ const Post = ({
       <div key={post._id} className="post-container">
         <div className="username">{post.author.username}</div>
         {isHomePage && (
-          <Button onClick={() => navigate(`users/${post.author._id}`)}>
+          <Button
+            onClick={() => navigate(`users/${post.author._id}`)}
+          >
             Profile
           </Button>
         )}

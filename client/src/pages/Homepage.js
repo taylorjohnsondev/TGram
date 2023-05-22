@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap";
 import ShowComments from "../components/ShowComments";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import Post from "../components/Post";
+import { toast } from "react-toastify";
 
 const initialComment = { text: "" };
 
@@ -12,6 +13,7 @@ const Homepage = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [comment, setComment] = useState(initialComment);
+  const [error, setError] = useState("");
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const axiosPrivate = useAxiosPrivate();
 
@@ -30,7 +32,11 @@ const Homepage = () => {
       .then((res) => {
         console.log(res);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setError(err.response.data.error);
+        toast.error(err.response.data.error);
+      });
   };
 
   const handleCommentInput = (event) => {
@@ -42,8 +48,6 @@ const Homepage = () => {
   const handleCommentSubmit = async (event, postId) => {
     event.preventDefault();
 
-    console.log(event);
-
     await axiosPrivate
       .put(`posts/comment/${postId}`, {
         text: comment.text,
@@ -53,13 +57,18 @@ const Homepage = () => {
         console.log(res.data);
         setComment(initialComment);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setError(err.response.data.error);
+      });
   };
 
   return (
     <div className="posts-container">
       {storedUser ? (
-        <div className="username">{"Welcome " + storedUser.username}</div>
+        <div className="username">
+          {"Welcome " + storedUser.username}
+        </div>
       ) : (
         <div className="username">
           Welcome to TGram! Have an account?
@@ -70,6 +79,7 @@ const Homepage = () => {
         <>
           <Post
             post={post}
+            error={error}
             key={post._id}
             handleLike={handleLike}
             handleCommentInput={handleCommentInput}

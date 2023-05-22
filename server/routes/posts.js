@@ -80,7 +80,15 @@ router.put("/like/:post_id", async (req, res) => {
   const { post_id } = req.params;
   const { user_id } = req.body;
 
+  const checkForLike = await Post.findOne({ _id: post_id });
+
   try {
+    //if the user has already liked the post, let's send back a response and return.
+    if (checkForLike.likes.includes(user_id)) {
+      return res
+        .status(400)
+        .json({ error: "You have already liked this post." });
+    }
     await Post.findByIdAndUpdate(
       post_id,
       {

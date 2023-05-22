@@ -7,6 +7,8 @@ import GoogleSuccess from "./pages/GoogleSuccess";
 import Logo from "./components/Logo";
 import { Route, Routes } from "react-router-dom";
 import { API_URL } from "./configs/constants";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   /**
@@ -30,6 +32,19 @@ function App() {
   return (
     <>
       <Logo />
+      {/* https://fkhadra.github.io/react-toastify/introduction/ */}
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
 
       <Routes>
         {/* Normal Routes */}

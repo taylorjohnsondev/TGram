@@ -6,7 +6,7 @@ import ShowComments from "../components/ShowComments";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import Post from "../components/Post";
 import { toast } from "react-toastify";
-
+import Loading from "../components/Loading";
 const initialComment = { text: "" };
 
 const Homepage = () => {
@@ -16,11 +16,13 @@ const Homepage = () => {
   const [error, setError] = useState("");
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const axiosPrivate = useAxiosPrivate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchPosts() {
       const response = await axios.get("/api/posts");
       setPosts(response.data);
+      setLoading(false)
     }
     fetchPosts();
   }, [comment]);
@@ -63,12 +65,14 @@ const Homepage = () => {
       });
   };
 
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <div className="posts-container">
       {storedUser ? (
-        <div className="username">
-          {"Welcome " + storedUser.username}
-        </div>
+        <div className="username">{"Welcome " + storedUser.username}</div>
       ) : (
         <div className="username">
           Welcome to TGram! Have an account?

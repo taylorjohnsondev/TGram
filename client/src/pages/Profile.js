@@ -8,6 +8,7 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import Follow from "../components/Follow";
 import ShowFollowers from "../components/ShowFollowers";
 import Post from "../components/Post";
+import Loading from "../components/Loading";
 
 const initialComment = { text: "" };
 
@@ -21,6 +22,7 @@ const Profile = () => {
   const [comment, setComment] = useState(initialComment);
   const axiosPrivate = useAxiosPrivate();
   const storedUser = JSON.parse(localStorage.getItem("user"));
+  const [loading, setLoading] = useState(true);
 
   const openForm = () => {
     setForm(true);
@@ -39,10 +41,7 @@ const Profile = () => {
     postData.append("text", text);
     postData.append("file", file);
     try {
-      const response = await axios.post(
-        `/posts/${params._id}`,
-        postData
-      );
+      const response = await axios.post(`/posts/${params._id}`, postData);
       setPosts([...posts, response.data]);
       setForm(false);
     } catch (error) {
@@ -84,6 +83,7 @@ const Profile = () => {
       setFollowers(userData.data.followers);
       setUser(userData.data);
       setPosts(postData.data);
+      setLoading(false)
     }
     fetchUser();
   }, [params._id, posts.length, comment]);
@@ -121,6 +121,10 @@ const Profile = () => {
       .catch((err) => console.log(err));
   };
 
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <div className="profile-container">
       <div className="profile-avatar">
@@ -137,10 +141,7 @@ const Profile = () => {
             </h1>
             {form && (
               <div className="profile-newpost-form">
-                <Form
-                  onSubmit={handlePost}
-                  encType="multipart/form-data"
-                >
+                <Form onSubmit={handlePost} encType="multipart/form-data">
                   <Form.Group controlId="formBasicText">
                     <Form.Label>Caption:</Form.Label>
                     <Form.Control as="textarea" name="text" />

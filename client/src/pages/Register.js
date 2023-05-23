@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import axios from "../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const initialState = {
   email: "",
@@ -40,6 +41,7 @@ const Register = ({ handleGoogleLogIn }) => {
       navigate(0);
     } catch (error) {
       console.log(error);
+      toast.error(error.response.data.error);
     }
 
     setValidated(true);
@@ -66,7 +68,6 @@ const Register = ({ handleGoogleLogIn }) => {
     <>
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <h1>Register</h1>
-
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email</Form.Label>
           <Form.Control
@@ -82,7 +83,6 @@ const Register = ({ handleGoogleLogIn }) => {
             Please enter a valid email address.
           </Form.Control.Feedback>
         </Form.Group>
-
         <Form.Group className="mb-3" controlId="formBasicUsername">
           <Form.Label>Username</Form.Label>
           <Form.Control
@@ -98,7 +98,6 @@ const Register = ({ handleGoogleLogIn }) => {
             Please enter your username.
           </Form.Control.Feedback>
         </Form.Group>
-
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
@@ -114,17 +113,17 @@ const Register = ({ handleGoogleLogIn }) => {
             Please enter your password.
           </Form.Control.Feedback>
         </Form.Group>
-
         <Button variant="primary" type="submit">
           Submit
         </Button>
+        or
       </Form>
 
       <div id="gSignInWrapper" onClick={(e) => handleGoogleLogIn(e)}>
-        <span class="label">Sign in with:</span>
+        <span class="label"></span>
         <div id="customBtn" class="customGPlusSignIn">
           <span class="icon"></span>
-          <span class="buttonText">Google</span>
+          <span class="buttonText">Continue with Google</span>
         </div>
       </div>
     </>

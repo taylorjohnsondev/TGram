@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Form, Button, InputGroup } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Login = ({ handleGoogleLogIn }) => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Login = ({ handleGoogleLogIn }) => {
       [e.target.name]: e.target.value,
     });
   };
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -38,6 +39,7 @@ const Login = ({ handleGoogleLogIn }) => {
       navigate(0);
     } catch (error) {
       console.log(error);
+      toast.error(error.response.data.error);
     }
 
     setValidated(true);
@@ -70,9 +72,7 @@ const Login = ({ handleGoogleLogIn }) => {
         <Form.Group className="mb-3" controlId="formBasicUsername">
           <Form.Label>Username</Form.Label>
           <InputGroup hasValidation>
-            <InputGroup.Text id="inputGroupPrepend">
-              @
-            </InputGroup.Text>
+            <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
             <Form.Control
               required
               type="text"
@@ -88,7 +88,6 @@ const Login = ({ handleGoogleLogIn }) => {
             </Form.Control.Feedback>
           </InputGroup>
         </Form.Group>
-
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
@@ -104,29 +103,23 @@ const Login = ({ handleGoogleLogIn }) => {
             Please enter your password.
           </Form.Control.Feedback>
         </Form.Group>
-
         <Button variant="primary" type="submit">
           Submit
         </Button>
+        or
       </Form>
-      <br />
-      Don't have an account?
-      <br />
-      <Button onClick={() => navigate("/register")}>
-        Register here
-      </Button>
       <div>
-        or{" "}
-        <div
-          id="gSignInWrapper"
-          onClick={(e) => handleGoogleLogIn(e)}
-        >
-          <span class="label">Sign in with:</span>
+        <div id="gSignInWrapper" onClick={(e) => handleGoogleLogIn(e)}>
           <div id="customBtn" class="customGPlusSignIn">
             <span class="icon"></span>
-            <span class="buttonText">Google</span>
+            <span class="buttonText">Continue with Google</span>
           </div>
         </div>
+      </div>
+      <div className="navigateBtn">
+        Don't have an account?
+        <br />
+        <Button onClick={() => navigate("/register")}>Register</Button>
       </div>
     </>
   );

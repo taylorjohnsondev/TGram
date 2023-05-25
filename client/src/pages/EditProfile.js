@@ -3,11 +3,16 @@ import { useParams } from "react-router-dom";
 import { Form, Button, InputGroup } from "react-bootstrap";
 import axios from "../hooks/useAxios";
 import { toast } from "react-toastify";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const [user, setUser] = useState({});
   const [validated, setValidated] = useState(false);
+  const axiosPrivate = useAxiosPrivate();
+  const storedUser = JSON.parse(localStorage.getItem("user")); 
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -18,6 +23,9 @@ const EditProfile = () => {
       const userData = await axios.get(`/users/${params._id}`);
       setUser(userData.data);
       setFormData({ username: userData.data.username });
+      if (params._id !== storedUser._id) {
+         navigate("/");
+      }
     }
     fetchUser();
   }, [params._id]);
@@ -33,7 +41,7 @@ const EditProfile = () => {
       e.stopPropagation();
     } else {
       try {
-        const response = await axios.put(`/users/${params._id}/edit`, {
+        const response = await axiosPrivate.put(`/users/${params._id}/edit`, {
           username: formData.username,
           password: formData.password,
         });

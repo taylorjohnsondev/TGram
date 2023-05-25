@@ -66,7 +66,7 @@ router.put("/follow/:_id", verifyJWT, async (req, res, next) => {
   }
 });
 
-router.put("/:_id/edit", async (req, res) => {
+router.put("/:_id/edit", verifyJWT, async (req, res) => { 
   const { username, password } = req.body;
 
   const encryptedpass = await bcrypt.hash(password, 12);

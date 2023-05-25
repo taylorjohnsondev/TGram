@@ -2,14 +2,14 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import axios from "../hooks/useAxios";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import Follow from "../components/Follow";
 import ShowFollowers from "../components/ShowFollowers";
 import Post from "../components/Post";
 import Loading from "../components/Loading";
-
+import { useNavigate } from "react-router-dom";
 const initialComment = { text: "" };
 
 const Profile = () => {
@@ -23,6 +23,7 @@ const Profile = () => {
   const axiosPrivate = useAxiosPrivate();
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const openForm = () => {
     setForm(true);
@@ -83,7 +84,7 @@ const Profile = () => {
       setFollowers(userData.data.followers);
       setUser(userData.data);
       setPosts(postData.data);
-      setLoading(false)
+      setLoading(false);
     }
     fetchUser();
   }, [params._id, posts.length, comment]);
@@ -139,6 +140,9 @@ const Profile = () => {
             <h1 className="profile-newpost" onClick={openForm}>
               <AiOutlinePlusCircle />
             </h1>
+            <Button onClick={() => navigate(`/users/${params._id}/edit`)}>
+              Edit Profile 
+            </Button>
             {form && (
               <div className="profile-newpost-form">
                 <Form onSubmit={handlePost} encType="multipart/form-data">

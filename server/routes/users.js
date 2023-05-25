@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/user");
 const ensureAuth = require("../middleware/ensureAuth");
 const verifyJWT = require("../middleware/verifyJWT");
+const bcrypt = require("bcrypt");
 
 router.get("/", async (req, res) => {
   try {
@@ -18,10 +19,7 @@ router.get("/:_id", async (req, res) => {
   try {
     User.findById(req.params._id)
       .select("-password")
-      .populate(
-        "followers",
-        "username nickname picture googlePicture"
-      ) //return new followers.
+      .populate("followers", "username nickname picture googlePicture") //return new followers.
       .then((user) => {
         return res.status(200).json(user);
       });
@@ -58,16 +56,40 @@ router.put("/follow/:_id", verifyJWT, async (req, res, next) => {
         { _id },
         { $push: { followers: follower } },
         { new: true } //return the updated document
-      ).populate(
-        "followers",
-        "username nickname picture googlePicture"
-      ); //return new followers.
+      ).populate("followers", "username nickname picture googlePicture"); //return new followers.
 
       res.status(200).json({ userToUpdate });
     }
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
+  }
+});
+
+router.put("/:_id/edit", async (req, res) => {
+  const { username, password } = req.body;
+
+  const encryptedpass = await bcrypt.hash(password, 12);
+
+  if (!password) {
+    return res.status(422).json({ error: "Please enter a new password" });
+  }
+
+  if (password.length < 7) {
+    return res
+      .status(423)
+      .json({ error: "Password must be atleast 7 characters" });
+  }
+
+  try {
+    const updateUser = await User.updateOne(
+      { _id: req.params._id },
+      { $set: { username: username, password: encryptedpass } }
+    );
+
+    res.json(updateUser);
+  } catch (error) {
+    console.log(error);
   }
 });
 

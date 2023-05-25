@@ -72,7 +72,7 @@ const Homepage = () => {
   return (
     <div className="posts-container">
       {storedUser ? (
-        <div className="username">{"Welcome " + storedUser.username}</div>
+        <></>
       ) : (
         <div className="username">
           Welcome to TGram! Have an account?

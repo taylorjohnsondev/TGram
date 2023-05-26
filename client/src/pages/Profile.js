@@ -10,6 +10,8 @@ import ShowFollowers from "../components/ShowFollowers";
 import Post from "../components/Post";
 import Loading from "../components/Loading";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
 const initialComment = { text: "" };
 
 const Profile = () => {
@@ -42,11 +44,18 @@ const Profile = () => {
     postData.append("text", text);
     postData.append("file", file);
     try {
-      const response = await axios.post(`/posts/${params._id}`, postData);
+      const response = await axios.post(
+        `/posts/${params._id}`,
+        postData
+      );
+
       setPosts([...posts, response.data]);
       setForm(false);
     } catch (error) {
       console.log(error);
+      if (error.response.data.error) {
+        return toast.error(error.response.data.error);
+      }
     }
   };
 
@@ -140,12 +149,17 @@ const Profile = () => {
             <h1 className="profile-newpost" onClick={openForm}>
               <AiOutlinePlusCircle />
             </h1>
-            <Button onClick={() => navigate(`/users/${params._id}/edit`)}>
-              Edit Profile 
+            <Button
+              onClick={() => navigate(`/users/${params._id}/edit`)}
+            >
+              Edit Profile
             </Button>
             {form && (
               <div className="profile-newpost-form">
-                <Form onSubmit={handlePost} encType="multipart/form-data">
+                <Form
+                  onSubmit={handlePost}
+                  encType="multipart/form-data"
+                >
                   <Form.Group controlId="formBasicText">
                     <Form.Label>Caption:</Form.Label>
                     <Form.Control as="textarea" name="text" />

@@ -105,7 +105,10 @@ const Profile = () => {
       .then((res) => {
         console.log(res);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data.error);
+      });
   };
 
   const handleCommentInput = (event) => {

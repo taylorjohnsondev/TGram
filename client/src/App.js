@@ -10,7 +10,6 @@ import { API_URL } from "./configs/constants";
 import { ToastContainer, toast } from "react-toastify";
 import EditProfile from "./pages/EditProfile";
 import "react-toastify/dist/ReactToastify.css";
-import Following from "./components/Following";
 
 function App() {
   /**
@@ -51,7 +50,6 @@ function App() {
       <Routes>
         {/* Normal Routes */}
         <Route path="/" element={<Homepage />} />
-        <Route path="/following" element={<Following />} /> 
 
         <Route
           path="login"

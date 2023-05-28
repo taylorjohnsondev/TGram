@@ -50,7 +50,7 @@ router.get("/following/:_id", async (req, res) => {
   try {
     const user = await User.findById(_id)
       .select("-password")
-      .populate("following", "username nickname picture googlePicture");
+      .populate("following", "username nickname picture googlePicture").sort({ time: -1 }); 
 
     const followingList = user.following.map(
       (followingUser) => followingUser._id

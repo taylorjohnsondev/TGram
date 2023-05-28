@@ -2,20 +2,20 @@ import React from "react";
 
 import "./index.css";
 
-export default function sectionWrapper({
+export default function SectionWrapper({
   className,
   children,
-  switchConfig,
+  handleFeatureChange,
   tip,
 }) {
   return (
     <div
       className={"SectionWrapper " + className}
       data-tip={tip}
-      onClick={switchConfig}
+      onClick={handleFeatureChange}
     >
-      <div className="relative w-full h-full">
-        <div className="childrenWrapper absolute top-0 left-0 w-full h-full flex items-center justify-center">
+      <div className="children-container">
+        <div className="childrenWrapper children-item">
           {children}
         </div>
       </div>

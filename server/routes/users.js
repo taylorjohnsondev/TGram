@@ -107,7 +107,7 @@ router.post(
   fileupload.single("file"),
   async (req, res, next) => {
     const { _id } = req.params; //user id
-    console.log(req);
+
     const userToUpdate = await User.findById({ _id: _id }); //find user by their id
 
     if (!userToUpdate) {

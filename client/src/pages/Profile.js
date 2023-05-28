@@ -81,7 +81,6 @@ const Profile = () => {
   //takes user object
   const checkForGooglePic = (user) => {
     if (user.picture.startsWith("uploads/")) {
-      console.log("true");
       return user.picture;
     } else if (user.googlePicture) {
       return user.googlePicture;

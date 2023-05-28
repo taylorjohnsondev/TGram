@@ -1,90 +1,128 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Avatar, { genConfig } from "react-nice-avatar";
+import SectionWrapper from "./SectionWrapper";
 import domtoimage from "dom-to-image";
-import axios from "../../hooks/useAxiosPrivate";
-
-import sectionWrapper from "./SectionWrapper";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-// https://github.com/dapi-labs/react-nice-avatar
-const config = {
-  sex: "woman",
-  faceColor: "#995053",
-  earSize: "big",
-  eyeStyle: "smile",
-  noseStyle: "long",
-  mouthStyle: "peace",
-  shirtStyle: "polo",
-  glassesStyle: "round",
-  hairColor: "#77311D",
-  hairStyle: "normal",
-  hatStyle: "none",
-  hatColor: "#F48150",
-  eyeBrowStyle: "up",
-  shirtColor: "#9287FF",
-  bgColor: "#74D153",
-};
+import { getRandomHexNumber } from "./getRandomHex";
+import { facialFeatures } from "./facialFeatures";
+import Ear from "./SVG/Ear";
+import Glasses from "./SVG/Glasses";
+import Eyes from "./SVG/Eyes";
+import Mouth from "./SVG/Mouth";
+import Hair from "./SVG/Hair";
+import Shirt from "./SVG/Shirt";
+import Hat from "./SVG/Hat";
+import Nose from "./SVG/Nose";
+import Face from "./SVG/Face";
+import "../Avatar/SectionWrapper/index.css";
 
 const AvatarEditor = ({ storedUser }) => {
-  const [features, setFeatures] = useState(config);
-  const [dataUrl, setDataUrl] = useState("");
-  const [formData, setFormData] = useState("");
+  const [features, setFeatures] = useState(facialFeatures);
   const [file, setFile] = useState("");
-  const canvasRef = useRef(null);
+  const [choose, setChoose] = useState(false);
 
+  const avatarConfig = genConfig(features);
   const axios = useAxiosPrivate();
-
-  function getRandomHexNumber() {
-    const hexDigits = "0123456789ABCDEF";
-    let hexNumber = "#";
-    for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(
-        Math.random() * hexDigits.length
-      );
-      hexNumber += hexDigits[randomIndex];
-    }
-    return hexNumber;
-  }
 
   const handleSkinColor = () => {
     setFeatures({ ...features, faceColor: getRandomHexNumber() });
   };
 
-  const handleGender = () => {
-    const newGender = features.sex === "man" ? "woman" : "man";
+  const handleBgColor = () => {
+    setFeatures({ ...features, bgColor: getRandomHexNumber() });
+  };
+
+  const handleEars = () => {
+    const newEars = features.earSize === "small" ? "big" : "small";
     setFeatures({
       ...features,
-      sex: newGender,
+      earSize: newEars,
     });
   };
 
+  const HAIR_STYLE_OPTIONS = [
+    "normal",
+    "thick",
+    "mohawk",
+    "womanLong",
+    "womanShort",
+  ];
+
   const hairStyleSelect = () => {
-    const options = [
-      "normal",
-      "thick",
-      "mohawk",
-      "womanLong",
-      "womanShort",
-    ];
-    const currentIndex = options.indexOf(features.hairStyle);
-    const newIndex = (currentIndex + 1) % options.length;
-    const newHairStyle = options[newIndex];
+    const currentIndex = HAIR_STYLE_OPTIONS.indexOf(
+      features.hairStyle
+    );
+    const newIndex = (currentIndex + 1) % HAIR_STYLE_OPTIONS.length;
+    const newHairStyle = HAIR_STYLE_OPTIONS[newIndex];
     setFeatures({ ...features, hairStyle: newHairStyle });
   };
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (canvas) {
-      // Render the avatar on the canvas after the component mounts
-      const context = canvas.getContext("2d");
-      const avatarConfig = genConfig(features);
-    }
-  }, [features]);
+  const GLASSES_OPTIONS = ["none", "round", "square"];
 
-  const handleUpload = async () => {
+  const handleGlasses = () => {
+    const currentIndex = GLASSES_OPTIONS.indexOf(
+      features.glassesStyle
+    );
+    const newIndex = (currentIndex + 1) % GLASSES_OPTIONS.length;
+    const changeGlasses = GLASSES_OPTIONS[newIndex];
+    setFeatures({ ...features, glassesStyle: changeGlasses });
+  };
+
+  const EYE_OPTIONS = ["circle", "oval", "smile"];
+
+  const handleEyes = () => {
+    const currentIndex = EYE_OPTIONS.indexOf(features.eyeStyle);
+    const newIndex = (currentIndex + 1) % EYE_OPTIONS.length;
+    const changeEyes = EYE_OPTIONS[newIndex];
+    setFeatures({ ...features, eyeStyle: changeEyes });
+  };
+
+  const NOSE_OPTIONS = ["short", "long", "round"];
+
+  const handleNose = () => {
+    const currentIndex = NOSE_OPTIONS.indexOf(features.noseStyle);
+    const newIndex = (currentIndex + 1) % NOSE_OPTIONS.length;
+    const changeNose = NOSE_OPTIONS[newIndex];
+    setFeatures({ ...features, noseStyle: changeNose });
+  };
+  const MOUTH_OPTIONS = ["laugh", "smile", "peace"];
+
+  const handleMouth = () => {
+    const currentIndex = MOUTH_OPTIONS.indexOf(features.mouthStyle);
+    const newIndex = (currentIndex + 1) % MOUTH_OPTIONS.length;
+    const changeMouth = MOUTH_OPTIONS[newIndex];
+    setFeatures({ ...features, mouthStyle: changeMouth });
+  };
+
+  const SHIRT_OPTIONS = ["hoody", "short", "polo"];
+
+  const handleShirt = () => {
+    const currentIndex = SHIRT_OPTIONS.indexOf(features.shirtStyle);
+    const newIndex = (currentIndex + 1) % SHIRT_OPTIONS.length;
+    const changeShirt = SHIRT_OPTIONS[newIndex];
+    setFeatures({ ...features, shirtStyle: changeShirt });
+  };
+
+  const handleShirtColor = () => {
+    setFeatures({ ...features, shirtColor: getRandomHexNumber() });
+  };
+
+  const HAT_OPTIONS = ["none", "beanie", "turban"];
+
+  const handleHat = () => {
+    const currentIndex = HAT_OPTIONS.indexOf(features.hatStyle);
+    const newIndex = (currentIndex + 1) % HAT_OPTIONS.length;
+    const changeHat = HAT_OPTIONS[newIndex];
+    setFeatures({ ...features, hatStyle: changeHat });
+  };
+
+  const handleHatColor = () => {
+    setFeatures({ ...features, hatColor: getRandomHexNumber() });
+  };
+
+  const handleUpload = useCallback(async () => {
     const form = new FormData();
     form.append("file", file);
-
-    console.log(form);
 
     const res = await axios
       .post(`/users/avatar/${storedUser._id}`, form, {
@@ -92,19 +130,16 @@ const AvatarEditor = ({ storedUser }) => {
       })
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
+  }, [axios, file, storedUser]);
 
-    console.log(res);
-  };
+  //get reference to the custom avatar element
   const nodeRef = useRef(null);
   useEffect(() => {
     nodeRef.current = document.getElementById("my-avatar");
   }, []);
 
-  function filter(node) {
-    return node.tagName !== "i";
-  }
-
   const handleBlob = async () => {
+    setChoose((prev) => !prev);
     const scale = 2;
     const node = nodeRef.current;
 
@@ -123,30 +158,137 @@ const AvatarEditor = ({ storedUser }) => {
       const file = new File([blob], `${storedUser.username}.png`, {
         type: blob.type,
       });
-      domtoimage.toSvg(node, { filter: filter }).then((dataUrl) => {
-        setFile(file);
-      });
+      setFile(file);
     }
   };
 
-  const avatarConfig = genConfig(features);
   return (
-    <div>
-      <canvas ref={canvasRef} width={200} height={200} />
+    <>
+      <div className="preview-container">
+        <Avatar
+          id="my-avatar"
+          style={{ width: "8rem", height: "8rem" }}
+          {...avatarConfig}
+        />
+      </div>
 
-      <Avatar
-        id="my-avatar"
-        style={{ width: "8rem", height: "8rem" }}
-        {...avatarConfig}
-      />
+      <div className="avatar-container">
+        <div className="selector-container">
+          <SectionWrapper
+            className={"section-item"}
+            tip="Skin Color"
+            handleFeatureChange={handleSkinColor}
+          >
+            <Face
+              maskId={storedUser._id}
+              pathId={storedUser._id}
+              color={"#964B00"}
+            />
+          </SectionWrapper>
 
-      <button onClick={handleGender}>Change Gender</button>
-      <button onClick={handleSkinColor}>Skin Color</button>
+          <SectionWrapper
+            className={"section-item"}
+            tip="Hair Style"
+            handleFeatureChange={hairStyleSelect}
+          >
+            <Hair color={"#ffffff"} />
+          </SectionWrapper>
 
-      <button onClick={hairStyleSelect}>Hair Style</button>
-      <button onClick={handleBlob}>Set</button>
-      <button onClick={handleUpload}>Upload it</button>
-    </div>
+          <SectionWrapper
+            className={"section-item"}
+            tip="Glasses"
+            handleFeatureChange={handleGlasses}
+          >
+            <Glasses />
+          </SectionWrapper>
+
+          <SectionWrapper
+            className={"section-item"}
+            tip="Eyes"
+            handleFeatureChange={handleEyes}
+          >
+            <Eyes />
+          </SectionWrapper>
+
+          <SectionWrapper
+            className={"section-item"}
+            tip="Nose"
+            handleFeatureChange={handleNose}
+          >
+            <Nose />
+          </SectionWrapper>
+          <SectionWrapper
+            className={"section-item"}
+            tip="Mouth"
+            handleFeatureChange={handleMouth}
+          >
+            <Mouth id={storedUser._id} />
+          </SectionWrapper>
+          <SectionWrapper
+            className={"section-item"}
+            tip="Ears"
+            handleFeatureChange={handleEars}
+          >
+            <Ear color="#ffffff" />
+          </SectionWrapper>
+
+          <SectionWrapper
+            className={"section-item"}
+            tip="Shirt"
+            handleFeatureChange={handleShirt}
+          >
+            <Shirt color="#ffffff" />
+          </SectionWrapper>
+
+          <SectionWrapper
+            className={"section-item"}
+            tip="Shirt Color"
+            handleFeatureChange={handleShirtColor}
+          >
+            <i className=" SectionWrapper" />
+          </SectionWrapper>
+          <SectionWrapper
+            className={"section-item"}
+            tip="Background Color"
+            handleFeatureChange={handleBgColor}
+          >
+            <i className=" SectionWrapper" />
+          </SectionWrapper>
+          <SectionWrapper
+            className={"section-item"}
+            tip="Hat"
+            handleFeatureChange={handleHat}
+          >
+            <Hat color={"#ffffff"} />
+          </SectionWrapper>
+          <SectionWrapper
+            className={"section-item"}
+            tip="Hat Color"
+            handleFeatureChange={handleHatColor}
+          >
+            <i className=" SectionWrapper" />
+          </SectionWrapper>
+        </div>
+      </div>
+      <div className="btn-container">
+        <button disabled={choose} onClick={handleBlob}>
+          {choose ? "Selection Confirmed" : "Set my avatar"}
+        </button>
+        <button hidden={!choose} onClick={handleUpload}>
+          Upload it
+        </button>
+        <button
+          onClick={() => {
+            setChoose((prev) => !prev);
+            setFeatures(
+              storedUser.username || storedUser.nickname || ""
+            );
+          }}
+        >
+          Reset
+        </button>
+      </div>
+    </>
   );
 };
 

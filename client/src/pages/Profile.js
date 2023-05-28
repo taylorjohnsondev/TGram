@@ -25,6 +25,7 @@ const Profile = () => {
   const axiosPrivate = useAxiosPrivate();
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
 
   const openForm = () => {
@@ -75,10 +76,14 @@ const Profile = () => {
   };
 
   //check if user has a photo from google
-  //if not use user.picture
+  //check if user has a custom avatar
+  //if not use user.picture which is default
   //takes user object
   const checkForGooglePic = (user) => {
-    if (user.googlePicture) {
+    if (user.picture.startsWith("uploads/")) {
+      console.log("true");
+      return user.picture;
+    } else if (user.googlePicture) {
       return user.googlePicture;
     } else {
       return user.picture;
@@ -141,7 +146,7 @@ const Profile = () => {
   return (
     <div className="profile-container">
       <div className="profile-avatar">
-        <img src={checkForGooglePic(user)} alt="User Avatar" />
+        <img src={`/${checkForGooglePic(user)}`} alt="User Avatar" />
       </div>
       <div className="profile-name">{user.nickname}</div>
       <div className="profile-username">{`${user.username}`}</div>

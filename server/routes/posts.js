@@ -48,6 +48,12 @@ router.post(
   "/:_id",
   fileupload.single("file"),
   async (req, res, next) => {
+    if (!req.file) {
+      return res
+        .status(422)
+        .json({ error: "Post picture required." });
+    }
+
     try {
       const { text } = req.body;
       const author = req.params._id;

@@ -1,0 +1,121 @@
+@keyframes jelly {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  25% {
+    transform: scale(0.9, 1.1);
+  }
+  50% {
+    transform: scale(1.1, 0.9);
+  }
+  75% {
+    transform: scale(0.95, 1.05);
+  }
+}
+
+.SectionWrapper {
+  cursor: pointer;
+  background: rgb(16, 1, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.SectionWrapper:hover {
+  animation: jelly 0.5s;
+}
+
+.SectionWrapper:hover:after {
+  opacity: 1;
+  transform: translateY(0px);
+}
+
+.SectionWrapper:after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: 120%;
+  border-radius: 5px;
+  font-size: 0.75rem;
+  color: #fff;
+  background: #303030;
+  padding: 0.15rem 0.75rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.2s ease-out;
+}
+
+.SectionWrapper .childrenWrapper > svg {
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.selector-container {
+  display: flex;
+  gap: 5px;
+  height: 8px;
+  border-radius: 50%;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.section-item {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  padding: 0.5rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.children-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.children-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-container {
+  background: rgba(120, 117, 124, 0.107);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  width: 75%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.preview-container {
+  display: flex;
+  justify-content: center;
+}

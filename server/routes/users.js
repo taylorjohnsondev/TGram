@@ -4,6 +4,7 @@ const User = require("../models/user");
 const ensureAuth = require("../middleware/ensureAuth");
 const verifyJWT = require("../middleware/verifyJWT");
 const bcrypt = require("bcrypt");
+const fileupload = require("../middleware/fileUpload");
 
 router.get("/", async (req, res) => {
   try {
@@ -19,7 +20,10 @@ router.get("/:_id", async (req, res) => {
   try {
     User.findById(req.params._id)
       .select("-password")
-      .populate("followers", "username nickname picture googlePicture") //return new followers.
+      .populate(
+        "followers",
+        "username nickname picture googlePicture"
+      ) //return new followers.
       .then((user) => {
         return res.status(200).json(user);
       });
@@ -56,7 +60,10 @@ router.put("/follow/:_id", verifyJWT, async (req, res, next) => {
         { _id },
         { $push: { followers: follower } },
         { new: true } //return the updated document
-      ).populate("followers", "username nickname picture googlePicture"); //return new followers.
+      ).populate(
+        "followers",
+        "username nickname picture googlePicture"
+      ); //return new followers.
 
       res.status(200).json({ userToUpdate });
     }
@@ -66,13 +73,15 @@ router.put("/follow/:_id", verifyJWT, async (req, res, next) => {
   }
 });
 
-router.put("/:_id/edit", verifyJWT, async (req, res) => { 
+router.put("/:_id/edit", verifyJWT, async (req, res) => {
   const { username, password } = req.body;
 
   const encryptedpass = await bcrypt.hash(password, 12);
 
   if (!password) {
-    return res.status(422).json({ error: "Please enter a new password" });
+    return res
+      .status(422)
+      .json({ error: "Please enter a new password" });
   }
 
   if (password.length < 7) {
@@ -92,5 +101,36 @@ router.put("/:_id/edit", verifyJWT, async (req, res) => {
     console.log(error);
   }
 });
+
+router.post(
+  "/avatar/:_id",
+  fileupload.single("file"),
+  async (req, res, next) => {
+    const { _id } = req.params; //user id
+
+    const userToUpdate = await User.findById({ _id: _id }); //find user by their id
+
+    if (!userToUpdate) {
+      return res.status(401).json({ error: "User not found." });
+    }
+
+    if (!req.file) {
+      return res
+        .status(422)
+        .json({ error: "Post picture required." });
+    }
+
+    try {
+      const updateAvatar = await User.findByIdAndUpdate(_id, {
+        picture: req.file?.path,
+      });
+
+      return res.status(201).json(updateAvatar);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+);
 
 module.exports = router;

@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import ModalComment from "./ModalComment";
 import ShowComments from "./ShowComments";
 import { AiOutlineHeart } from "react-icons/ai";
-import { Button, Toast } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
+import ShowToolTip from "./ShowToolTip";
 import { toast } from "react-toastify";
 
 const Post = ({
@@ -12,7 +13,6 @@ const Post = ({
   handleCommentInput,
   comment,
   handleCommentSubmit,
-  error,
 }) => {
   const [showCommentModal, setShowCommentModal] = useState(false);
   const navigate = useNavigate();
@@ -37,8 +37,12 @@ const Post = ({
         <div>{new Date(post.time).toLocaleString()}</div>
 
         <div onClick={() => handleLike(post._id)}>
-          <AiOutlineHeart />
-          {post.likes.length}
+          {post.likes && post.likes.length >= 0 && (
+            <ShowToolTip post={post}>
+              <AiOutlineHeart />
+              {post.likes.length}
+            </ShowToolTip>
+          )}
         </div>
         <div>
           <ModalComment

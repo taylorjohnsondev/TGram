@@ -5,6 +5,7 @@ import axios from "../hooks/useAxios";
 import { toast } from "react-toastify";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { useNavigate } from "react-router-dom";
+import AvatarEditor from "../components/Avatar/AvatarEditor";
 
 const EditProfile = () => {
   const params = useParams();
@@ -12,7 +13,7 @@ const EditProfile = () => {
   const [user, setUser] = useState({});
   const [validated, setValidated] = useState(false);
   const axiosPrivate = useAxiosPrivate();
-  const storedUser = JSON.parse(localStorage.getItem("user")); 
+  const storedUser = JSON.parse(localStorage.getItem("user"));
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -24,7 +25,7 @@ const EditProfile = () => {
       setUser(userData.data);
       setFormData({ username: userData.data.username });
       if (params._id !== storedUser._id) {
-         navigate("/");
+        navigate("/");
       }
     }
     fetchUser();
@@ -41,13 +42,16 @@ const EditProfile = () => {
       e.stopPropagation();
     } else {
       try {
-        const response = await axiosPrivate.put(`/users/${params._id}/edit`, {
-          username: formData.username,
-          password: formData.password,
-        });
+        const response = await axiosPrivate.put(
+          `/users/${params._id}/edit`,
+          {
+            username: formData.username,
+            password: formData.password,
+          }
+        );
         toast.success("Profile Updated");
       } catch (error) {
-        toast.error(error.response.data.error); 
+        toast.error(error.response.data.error);
       }
     }
     setValidated(true);
@@ -55,8 +59,9 @@ const EditProfile = () => {
 
   return (
     <>
+      <h1>Edit Profile</h1>
+      <AvatarEditor storedUser={storedUser} />
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
-        <h1>Edit Profile</h1>
         <Form.Group controlId="formBasicUsername">
           <Form.Label>Username</Form.Label>
           <InputGroup hasValidation>

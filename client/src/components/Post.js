@@ -5,7 +5,6 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { Button } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import ShowToolTip from "./ShowToolTip";
-import { toast } from "react-toastify";
 
 const Post = ({
   post,
@@ -25,9 +24,17 @@ const Post = ({
         <div className="username">{post.author.username}</div>
         {isHomePage && (
           <Button
+            className="pictureBtn" 
             onClick={() => navigate(`users/${post.author._id}`)}
           >
-            Profile
+            <img
+              className="post-picture"
+              src={
+                post.author.googlePicture
+                  ? post.author.googlePicture
+                  : post.author.picture
+              }
+            ></img>
           </Button>
         )}
         <div className="photo-container">

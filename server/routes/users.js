@@ -20,10 +20,7 @@ router.get("/:_id", async (req, res) => {
   try {
     User.findById(req.params._id)
       .select("-password")
-      .populate(
-        "followers",
-        "username nickname picture googlePicture"
-      ) //return new followers.
+      .populate("followers", "username nickname picture googlePicture") //return new followers.
       .then((user) => {
         return res.status(200).json(user);
       });
@@ -36,8 +33,8 @@ router.get("/:_id", async (req, res) => {
 /* This code block defines a PUT route for following a user. It takes in the user ID of the user being
 followed as a parameter in the URL, and verifies the JWT token using the `verifyJWT` middleware. */
 router.put("/follow/:_id", verifyJWT, async (req, res, next) => {
-  const { _id } = req.params; //The user who is being followed.
-  const follower = req.id; //the user who wants to follow.
+  const { _id } = req.params; // The user who is being followed.
+  const follower = req.id; // The user who wants to follow.
 
   if (follower === _id) {
     return res
@@ -46,26 +43,24 @@ router.put("/follow/:_id", verifyJWT, async (req, res, next) => {
   }
 
   try {
-    const checkIfUserFollows = await User.find({ _id });
-    //lets check if this user is already following to avoid duplicate follows.
-    if (
-      checkIfUserFollows.length > 0 &&
-      checkIfUserFollows[0].followers.includes(follower)
-    ) {
+    const userBeingFollowed = await User.findById(_id);
+    const userDoingFollowing = await User.findById(follower);
+
+    // Check if the user is already being followed
+    if (userBeingFollowed.followers.includes(follower)) {
       return res
         .status(400)
         .json({ error: "You are already following this user." });
     } else {
-      const userToUpdate = await User.findOneAndUpdate(
-        { _id },
-        { $push: { followers: follower } },
-        { new: true } //return the updated document
-      ).populate(
-        "followers",
-        "username nickname picture googlePicture"
-      ); //return new followers.
+      // Update the user who is being followed
+      userBeingFollowed.followers.push(follower);
+      await userBeingFollowed.save();
 
-      res.status(200).json({ userToUpdate });
+      // Update the user who is doing the following
+      userDoingFollowing.following.push(_id);
+      await userDoingFollowing.save();
+
+      res.status(200).json({ userBeingFollowed });
     }
   } catch (error) {
     console.log(error);
@@ -79,9 +74,7 @@ router.put("/:_id/edit", verifyJWT, async (req, res) => {
   const encryptedpass = await bcrypt.hash(password, 12);
 
   if (!password) {
-    return res
-      .status(422)
-      .json({ error: "Please enter a new password" });
+    return res.status(422).json({ error: "Please enter a new password" });
   }
 
   if (password.length < 7) {
@@ -115,14 +108,12 @@ router.post(
     }
 
     if (!req.file) {
-      return res
-        .status(422)
-        .json({ error: "Post picture required." });
+      return res.status(422).json({ error: "Post picture required." });
     }
 
     try {
       const updateAvatar = await User.findByIdAndUpdate(_id, {
-        picture: req.file?.path,
+        picture: req.file && req.file.path,
       });
 
       return res.status(201).json(updateAvatar);

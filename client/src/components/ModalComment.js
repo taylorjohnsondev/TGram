@@ -37,13 +37,13 @@ function ModalComment({
                 onChange={handleCommentInput}
               />
             </Form.Group>
-            <Button type="submit" variant="primary" onClick={handleClose}>
+            <Button className="bootBtn" type="submit" variant="primary" onClick={handleClose}>
               Post Comment
             </Button>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button className="bootBtn" variant="secondary" onClick={handleClose}>
             Close
           </Button>
         </Modal.Footer>

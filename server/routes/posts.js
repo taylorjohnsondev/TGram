@@ -5,26 +5,26 @@ const User = require("../models/user");
 const fileupload = require("../middleware/fileUpload");
 
 const populateQuery = [
-  { path: "author", select: ["username", "picture"] },
+  { path: "author", select: "username picture" },
   {
     path: "comments",
     populate: {
       path: "author",
-      select: ["username", "picture", "googlePicture", "created"],
+      select: "username picture googlePicture created",
     },
   },
   {
     path: "likes",
-    populate: "username",
-    select: ["picture", "googlePicture"],
+    populate: {
+      path: "username",
+      select: "picture googlePicture",
+    },
   },
 ];
 
 router.get("/", async (req, res) => {
   try {
-    const posts = await Post.find()
-      .populate(populateQuery)
-      .sort({ time: -1 });
+    const posts = await Post.find().populate(populateQuery).sort({ time: -1 });
     res.json(posts);
   } catch (err) {
     console.error(err);
@@ -44,36 +44,53 @@ router.get("/:_id", async (req, res) => {
   }
 });
 
-router.post(
-  "/:_id",
-  fileupload.single("file"),
-  async (req, res, next) => {
-    if (!req.file) {
-      return res
-        .status(422)
-        .json({ error: "Post picture required." });
-    }
+router.get("/following/:_id", async (req, res) => {
+  const { _id } = req.params;
 
-    try {
-      const { text } = req.body;
-      const author = req.params._id;
-      const file = "/uploads/" + req.file.filename;
+  try {
+    const user = await User.findById(_id)
+      .select("-password")
+      .populate("following", "username nickname picture googlePicture");
 
-      const post = await Post.create({ file, text, author });
+    const followingList = user.following.map(
+      (followingUser) => followingUser._id
+    );
 
-      const user = await User.findByIdAndUpdate(
-        author,
-        { $push: { posts: post } },
-        { new: true }
-      );
+    const posts = await Post.find({ author: { $in: followingList } }).populate(
+      populateQuery
+    );
 
-      res.status(201).json(post);
-    } catch (err) {
-      console.error(err);
-      res.status(500);
-    }
+    res.json(posts);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
   }
-);
+});
+
+router.post("/:_id", fileupload.single("file"), async (req, res, next) => {
+  if (!req.file) {
+    return res.status(422).json({ error: "Post picture required." });
+  }
+
+  try {
+    const { text } = req.body;
+    const author = req.params._id;
+    const file = "/uploads/" + req.file.filename;
+
+    const post = await Post.create({ file, text, author });
+
+    const user = await User.findByIdAndUpdate(
+      author,
+      { $push: { posts: post } },
+      { new: true }
+    );
+
+    res.status(201).json(post);
+  } catch (err) {
+    console.error(err);
+    res.status(500);
+  }
+});
 
 /* This code block is defining a PUT route for liking a post. It takes in the post ID as a parameter in
 the URL and the user ID in the request body. It then uses `Post.findByIdAndUpdate()` to find the
@@ -114,9 +131,7 @@ router.put("/like/:post_id", async (req, res) => {
         res.status(200).json({ updatedPost });
       })
       .catch((err) => {
-        return res
-          .status(500)
-          .json({ error: "something went wrong." });
+        return res.status(500).json({ error: "something went wrong." });
       });
   } catch (err) {
     console.error(err);

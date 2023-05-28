@@ -57,7 +57,7 @@ const Login = ({ handleGoogleLogIn }) => {
         <div className="logout-card">
           @{user.username}, are you sure you want to log out?
           <br />
-          <Button className="logout-btn" onClick={handleLogout}>
+          <Button className="bootBtn" onClick={handleLogout}>
             Log out
           </Button>
         </div>
@@ -103,7 +103,7 @@ const Login = ({ handleGoogleLogIn }) => {
             Please enter your password.
           </Form.Control.Feedback>
         </Form.Group>
-        <Button variant="primary" type="submit">
+        <Button className="bootBtn" variant="primary" type="submit">
           Submit
         </Button>
         or

@@ -97,7 +97,7 @@ const EditProfile = () => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        <Button className="bootBtn" variant="primary" type="submit">
           Save Changes
         </Button>
       </Form>

@@ -12,6 +12,34 @@ code {
     monospace;
 }
 
+
+.bootBtn {
+  background-color: transparent;
+  color: black;
+  border: 2px solid black;
+  text-align: center;
+  display: block;
+  margin: 0 auto;
+} 
+
+.bootBtn:hover {
+  background-color: transparent;
+  color: black;
+  border: 2px solid grey;
+  text-align: center;
+  display: block;
+  margin: 0 auto;
+} 
+
+.bootBtn:active {
+  background-color: transparent;
+  color: black;
+  border: 2px solid grey;
+  text-align: center;
+  display: block;
+  margin: 0 auto;
+} 
+
 /*POST CSS*/
 .post-container {
   display: flex;
@@ -36,6 +64,22 @@ code {
 .username {
   text-align: center;
 }
+.post-picture{
+  max-width: 5rem;
+  border-radius: 50%;
+}
+.pictureBtn{
+  border-radius: 50%;
+  background-color: transparent;
+  border: 0px
+}
+.pictureBtn:hover{
+  border-radius: 50%;
+  background-color: transparent;
+  opacity: 50%;
+  border: 0px
+}
+
 @media only screen and (max-width: 600px) {
   .post-container {
     max-width: 80%;

@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import Loading from "../components/Loading";
 const initialComment = { text: "" };
 
-const Homepage = () => {
+const Following = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [comment, setComment] = useState(initialComment);
@@ -16,21 +16,17 @@ const Homepage = () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const axiosPrivate = useAxiosPrivate();
   const [loading, setLoading] = useState(true);
-  const [showFollowedPosts, setShowFollowedPosts] = useState(false);
 
   useEffect(() => {
     async function fetchPosts() {
-      let response;
-      if (showFollowedPosts) {
-        response = await axios.get(`/api/posts/following/${storedUser._id}`);
-      } else {
-        response = await axios.get("/api/posts");
-      }
+      const response = await axios.get(
+        `/api/posts/following/${storedUser._id}`
+      );
       setPosts(response.data);
       setLoading(false);
     }
     fetchPosts();
-  }, [comment, showFollowedPosts]); 
+  }, [comment]);
 
   const handleLike = async (postId) => {
     const req = { user_id: storedUser._id };
@@ -76,18 +72,13 @@ const Homepage = () => {
 
   return (
     <div className="posts-container">
+      Following
       {storedUser ? (
         <>
-          <Button
-            className="bootBtn"
-            onClick={() => setShowFollowedPosts(false)}
-          >
+          <Button className="bootBtn" onClick={() => navigate("/")}>
             All Posts
           </Button>
-          <Button
-            className="bootBtn"
-            onClick={() => setShowFollowedPosts(true)}
-          >
+          <Button className="bootBtn" onClick={() => navigate("/following")}>
             Following
           </Button>
         </>
@@ -110,10 +101,10 @@ const Homepage = () => {
             comment={comment}
             handleCommentSubmit={handleCommentSubmit}
           />
-        </>
-      ))}
+        </> 
+      ))} 
     </div>
   );
 };
 
-export default Homepage;
+export default Following;

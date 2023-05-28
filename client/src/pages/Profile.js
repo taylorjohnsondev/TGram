@@ -45,10 +45,7 @@ const Profile = () => {
     postData.append("text", text);
     postData.append("file", file);
     try {
-      const response = await axios.post(
-        `/posts/${params._id}`,
-        postData
-      );
+      const response = await axios.post(`/posts/${params._id}`, postData);
 
       setPosts([...posts, response.data]);
       setForm(false);
@@ -153,20 +150,18 @@ const Profile = () => {
       {storedUser && storedUser._id === params._id ? (
         <div>
           <div className="posts-container">
-            <h1 className="profile-newpost" onClick={openForm}>
-              <AiOutlinePlusCircle />
-            </h1>
             <Button
+              className="bootBtn"
               onClick={() => navigate(`/users/${params._id}/edit`)}
             >
               Edit Profile
             </Button>
+            <h1 className="profile-newpost" onClick={openForm}>
+              <AiOutlinePlusCircle />
+            </h1>
             {form && (
               <div className="profile-newpost-form">
-                <Form
-                  onSubmit={handlePost}
-                  encType="multipart/form-data"
-                >
+                <Form onSubmit={handlePost} encType="multipart/form-data">
                   <Form.Group controlId="formBasicText">
                     <Form.Label>Caption:</Form.Label>
                     <Form.Control as="textarea" name="text" />

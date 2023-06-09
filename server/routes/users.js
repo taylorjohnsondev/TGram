@@ -20,7 +20,10 @@ router.get("/:_id", async (req, res) => {
   try {
     User.findById(req.params._id)
       .select("-password")
-      .populate("followers", "username nickname picture googlePicture") //return new followers.
+      .populate(
+        "followers",
+        "username nickname picture googlePicture"
+      ) //return new followers.
       .then((user) => {
         return res.status(200).json(user);
       });
@@ -74,7 +77,9 @@ router.put("/:_id/edit", verifyJWT, async (req, res) => {
   const encryptedpass = await bcrypt.hash(password, 12);
 
   if (!password) {
-    return res.status(422).json({ error: "Please enter a new password" });
+    return res
+      .status(422)
+      .json({ error: "Please enter a new password" });
   }
 
   if (password.length < 7) {
@@ -108,13 +113,15 @@ router.post(
     }
 
     if (!req.file) {
-      return res.status(422).json({ error: "Post picture required." });
+      return res
+        .status(422)
+        .json({ error: "Post picture required." });
     }
 
     try {
       const updateAvatar = await User.findByIdAndUpdate(_id, {
         picture: req.file && req.file.path,
-      });
+      }).select("-password"); //NEVER SEND PASSWORD BACK TO CLIENT EVEN IF IT IS HASHED!
 
       return res.status(201).json(updateAvatar);
     } catch (err) {

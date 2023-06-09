@@ -173,123 +173,125 @@ const AvatarEditor = ({ storedUser }) => {
           style={{ width: "8rem", height: "8rem" }}
           {...avatarConfig}
         />
-      </div>
 
-      <div className="avatar-container">
-        <div className="selector-container">
-          <SectionWrapper
-            className={"section-item"}
-            tip="Skin Color"
-            handleFeatureChange={handleSkinColor}
-          >
-            <Face
-              maskId={storedUser._id}
-              pathId={storedUser._id}
-              color={"#964B00"}
-            />
-          </SectionWrapper>
+        <div className="avatar-container">
+          <div className="selector-container">
+            <SectionWrapper
+              className={"section-item"}
+              tip="Skin Color"
+              handleFeatureChange={handleSkinColor}
+            >
+              <Face
+                maskId={storedUser._id}
+                pathId={storedUser._id}
+                color={"#964B00"}
+              />
+            </SectionWrapper>
 
-          <SectionWrapper
-            className={"section-item"}
-            tip="Hair Style"
-            handleFeatureChange={hairStyleSelect}
-          >
-            <Hair color={"#ffffff"} />
-          </SectionWrapper>
+            <SectionWrapper
+              className={"section-item"}
+              tip="Hair Style"
+              handleFeatureChange={hairStyleSelect}
+            >
+              <Hair color={"#ffffff"} />
+            </SectionWrapper>
 
-          <SectionWrapper
-            className={"section-item"}
-            tip="Glasses"
-            handleFeatureChange={handleGlasses}
-          >
-            <Glasses />
-          </SectionWrapper>
+            <SectionWrapper
+              className={"section-item"}
+              tip="Glasses"
+              handleFeatureChange={handleGlasses}
+            >
+              <Glasses />
+            </SectionWrapper>
 
-          <SectionWrapper
-            className={"section-item"}
-            tip="Eyes"
-            handleFeatureChange={handleEyes}
-          >
-            <Eyes />
-          </SectionWrapper>
+            <SectionWrapper
+              className={"section-item"}
+              tip="Eyes"
+              handleFeatureChange={handleEyes}
+            >
+              <Eyes />
+            </SectionWrapper>
 
-          <SectionWrapper
-            className={"section-item"}
-            tip="Nose"
-            handleFeatureChange={handleNose}
-          >
-            <Nose />
-          </SectionWrapper>
-          <SectionWrapper
-            className={"section-item"}
-            tip="Mouth"
-            handleFeatureChange={handleMouth}
-          >
-            <Mouth id={storedUser._id} />
-          </SectionWrapper>
-          <SectionWrapper
-            className={"section-item"}
-            tip="Ears"
-            handleFeatureChange={handleEars}
-          >
-            <Ear color="#ffffff" />
-          </SectionWrapper>
+            <SectionWrapper
+              className={"section-item"}
+              tip="Nose"
+              handleFeatureChange={handleNose}
+            >
+              <Nose />
+            </SectionWrapper>
+            <SectionWrapper
+              className={"section-item"}
+              tip="Mouth"
+              handleFeatureChange={handleMouth}
+            >
+              <Mouth id={storedUser._id} />
+            </SectionWrapper>
+            <SectionWrapper
+              className={"section-item"}
+              tip="Ears"
+              handleFeatureChange={handleEars}
+            >
+              <Ear color="#ffffff" />
+            </SectionWrapper>
 
-          <SectionWrapper
-            className={"section-item"}
-            tip="Shirt"
-            handleFeatureChange={handleShirt}
-          >
-            <Shirt color="#ffffff" />
-          </SectionWrapper>
+            <SectionWrapper
+              className={"section-item"}
+              tip="Shirt"
+              handleFeatureChange={handleShirt}
+            >
+              <Shirt color="#ffffff" />
+            </SectionWrapper>
 
-          <SectionWrapper
-            className={"section-item"}
-            tip="Shirt Color"
-            handleFeatureChange={handleShirtColor}
-          >
-            <i className=" SectionWrapper" />
-          </SectionWrapper>
-          <SectionWrapper
-            className={"section-item"}
-            tip="Background Color"
-            handleFeatureChange={handleBgColor}
-          >
-            <i className=" SectionWrapper" />
-          </SectionWrapper>
-          <SectionWrapper
-            className={"section-item"}
-            tip="Hat"
-            handleFeatureChange={handleHat}
-          >
-            <Hat color={"#ffffff"} />
-          </SectionWrapper>
-          <SectionWrapper
-            className={"section-item"}
-            tip="Hat Color"
-            handleFeatureChange={handleHatColor}
-          >
-            <i className=" SectionWrapper" />
-          </SectionWrapper>
+            <SectionWrapper
+              className={"section-item"}
+              tip="Shirt Color"
+              handleFeatureChange={handleShirtColor}
+            >
+              <i className=" SectionWrapper" />
+            </SectionWrapper>
+            <SectionWrapper
+              className={"section-item"}
+              tip="Background Color"
+              handleFeatureChange={handleBgColor}
+            >
+              <i className=" SectionWrapper" />
+            </SectionWrapper>
+            <SectionWrapper
+              className={"section-item"}
+              tip="Hat"
+              handleFeatureChange={handleHat}
+            >
+              <Hat color={"#ffffff"} />
+            </SectionWrapper>
+            <SectionWrapper
+              className={"section-item"}
+              tip="Hat Color"
+              handleFeatureChange={handleHatColor}
+            >
+              <i className=" SectionWrapper" />
+            </SectionWrapper>
+          </div>
         </div>
-      </div>
-      <div className="btn-container">
-        <button disabled={choose} onClick={handleBlob}>
-          {choose ? "Selection Confirmed" : "Set my avatar"}
-        </button>
-        <button hidden={!choose} onClick={handleUpload}>
-          Upload it
-        </button>
-        <button
-          onClick={() => {
-            setChoose((prev) => !prev);
-            setFeatures(
-              storedUser.username || storedUser.nickname || ""
-            );
-          }}
-        >
-          Reset
-        </button>
+        <div className="btn-container">
+          <button disabled={choose} onClick={handleBlob}>
+            {choose ? "Selection Confirmed" : "Set my avatar"}
+          </button>
+          <button
+            className="uploadIt"
+            hidden={!choose}
+            onClick={handleUpload}
+          >
+            Upload it
+          </button>
+          <button
+            onClick={() => {
+              setChoose((prev) => !prev);
+              setFeatures(facialFeatures);
+            }}
+          >
+            Reset
+          </button>
+        </div>
       </div>
     </>
   );

@@ -5,15 +5,18 @@ import domtoimage from "dom-to-image";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { getRandomHexNumber } from "./getRandomHex";
 import { facialFeatures } from "./facialFeatures";
-import Ear from "./SVG/Ear";
-import Glasses from "./SVG/Glasses";
-import Eyes from "./SVG/Eyes";
-import Mouth from "./SVG/Mouth";
-import Hair from "./SVG/Hair";
-import Shirt from "./SVG/Shirt";
-import Hat from "./SVG/Hat";
-import Nose from "./SVG/Nose";
-import Face from "./SVG/Face";
+import {
+  Hair,
+  Shirt,
+  Eyes,
+  Hat,
+  Nose,
+  Face,
+  Mouth,
+  Glasses,
+  Ear,
+} from "./SVG";
+
 import "../Avatar/SectionWrapper/index.css";
 
 const AvatarEditor = ({ storedUser }) => {

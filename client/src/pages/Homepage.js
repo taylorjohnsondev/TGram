@@ -22,7 +22,9 @@ const Homepage = () => {
     async function fetchPosts() {
       let response;
       if (showFollowedPosts) {
-        response = await axios.get(`/api/posts/following/${storedUser._id}`);
+        response = await axios.get(
+          `/api/posts/following/${storedUser._id}`
+        );
       } else {
         response = await axios.get("/api/posts");
       }
@@ -30,7 +32,7 @@ const Homepage = () => {
       setLoading(false);
     }
     fetchPosts();
-  }, [comment, showFollowedPosts]); 
+  }, []); // IF we put comments in the dependancy array, everytime you type in the comment input it fires a get request.
 
   const handleLike = async (postId) => {
     const req = { user_id: storedUser._id };
@@ -94,7 +96,10 @@ const Homepage = () => {
       ) : (
         <div className="username">
           Welcome to TGram! Have an account?
-          <Button className="bootBtn" onClick={() => navigate("/login")}>
+          <Button
+            className="bootBtn"
+            onClick={() => navigate("/login")}
+          >
             Login
           </Button>
         </div>

@@ -1,0 +1,9 @@
+export { default as Hair } from "./Hair";
+export { default as Glasses } from "./Glasses";
+export { default as Ear } from "./Ear";
+export { default as Hat } from "./Hat";
+export { default as Mouth } from "./Mouth";
+export { default as Nose } from "./Nose";
+export { default as Shirt } from "./Shirt";
+export { default as Face } from "./Face";
+export { default as Eyes } from "./Eyes";

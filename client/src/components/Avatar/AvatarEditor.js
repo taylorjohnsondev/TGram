@@ -3,7 +3,10 @@ import Avatar, { genConfig } from "react-nice-avatar";
 import SectionWrapper from "./SectionWrapper";
 import domtoimage from "dom-to-image";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { getRandomHexNumber } from "./getRandomHex";
+import {
+  getRandomSkinToneHex,
+  getRandomHexNumber,
+} from "./getRandomHex";
 import { facialFeatures } from "./facialFeatures";
 import {
   Hair,
@@ -18,17 +21,19 @@ import {
 } from "./SVG";
 
 import "../Avatar/SectionWrapper/index.css";
+import { toast } from "react-toastify";
 
 const AvatarEditor = ({ storedUser }) => {
   const [features, setFeatures] = useState(facialFeatures);
   const [file, setFile] = useState("");
   const [choose, setChoose] = useState(false);
+  const [avatarUploaded, setAvatarUploaded] = useState(false);
 
   const avatarConfig = genConfig(features);
   const axios = useAxiosPrivate();
 
   const handleSkinColor = () => {
-    setFeatures({ ...features, faceColor: getRandomHexNumber() });
+    setFeatures({ ...features, faceColor: getRandomSkinToneHex() });
   };
 
   const handleBgColor = () => {
@@ -58,6 +63,10 @@ const AvatarEditor = ({ storedUser }) => {
     const newIndex = (currentIndex + 1) % HAIR_STYLE_OPTIONS.length;
     const newHairStyle = HAIR_STYLE_OPTIONS[newIndex];
     setFeatures({ ...features, hairStyle: newHairStyle });
+  };
+
+  const handleHairColor = () => {
+    setFeatures({ ...features, hairColor: getRandomHexNumber() });
   };
 
   const GLASSES_OPTIONS = ["none", "round", "square"];
@@ -131,8 +140,16 @@ const AvatarEditor = ({ storedUser }) => {
       .post(`/users/avatar/${storedUser._id}`, form, {
         headers: { "Content-Type": "multipart/form-data" },
       })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        console.log(res);
+        setAvatarUploaded(true);
+        toast.success("Avatar updated!");
+      })
+      .catch((err) => {
+        console.log(err);
+        setAvatarUploaded(false);
+        toast.error("Something went wrong...");
+      });
   }, [axios, file, storedUser]);
 
   //get reference to the custom avatar element
@@ -187,6 +204,19 @@ const AvatarEditor = ({ storedUser }) => {
                 color={"#964B00"}
               />
             </SectionWrapper>
+            {/* //HairColor not available for mohawk or thick so we want to hide the option for them. */}
+            {features.hairStyle === "mohawk" ||
+            features.hairStyle === "thick" ? (
+              ""
+            ) : (
+              <SectionWrapper
+                className={"section-item"}
+                tip="Hair Color"
+                handleFeatureChange={handleHairColor}
+              >
+                <Hair color={getRandomHexNumber()} />
+              </SectionWrapper>
+            )}
 
             <SectionWrapper
               className={"section-item"}
@@ -273,20 +303,25 @@ const AvatarEditor = ({ storedUser }) => {
           </div>
         </div>
         <div className="btn-container">
-          <button disabled={choose} onClick={handleBlob}>
+          <button
+            hidden={avatarUploaded}
+            disabled={choose}
+            onClick={handleBlob}
+          >
             {choose ? "Selection Confirmed" : "Set my avatar"}
           </button>
           <button
             className="uploadIt"
-            hidden={!choose}
+            hidden={avatarUploaded || !choose}
             onClick={handleUpload}
           >
             Upload it
           </button>
           <button
             onClick={() => {
-              setChoose((prev) => !prev);
+              setChoose(false);
               setFeatures(facialFeatures);
+              setAvatarUploaded(false);
             }}
           >
             Reset

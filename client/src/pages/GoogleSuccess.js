@@ -1,9 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import axios from "../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../Context/AuthContext";
 
 const GoogleSuccess = () => {
   const navigate = useNavigate();
+
+  const { setUser, user } = useContext(AuthContext);
 
   /**
    * This function fetches the authenticated Google user's data and stores it in local storage.
@@ -18,6 +21,7 @@ const GoogleSuccess = () => {
 
     if (response && response.data) {
       localStorage.setItem("user", JSON.stringify(response.data));
+      setUser(response.data);
     }
   };
 

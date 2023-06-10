@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Form, Button, InputGroup } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../Context/AuthContext";
 import { toast } from "react-toastify";
 
 const Login = ({ handleGoogleLogIn }) => {
   const navigate = useNavigate();
+
+  const { setUser, user } = useContext(AuthContext);
 
   const initialState = {
     username: "",
@@ -15,7 +18,7 @@ const Login = ({ handleGoogleLogIn }) => {
 
   const [formData, setFormData] = useState(initialState);
   const [validated, setValidated] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user"));
+  console.log(user);
 
   const handleInput = (e) => {
     setFormData({
@@ -23,7 +26,7 @@ const Login = ({ handleGoogleLogIn }) => {
       [e.target.name]: e.target.value,
     });
   };
- 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -34,7 +37,7 @@ const Login = ({ handleGoogleLogIn }) => {
     }
     try {
       const response = await axios.post("api/auth/login", formData);
-      localStorage.setItem("user", JSON.stringify(response.data));
+      setUser(response.data);
       navigate("/");
       navigate(0);
     } catch (error) {
@@ -72,7 +75,9 @@ const Login = ({ handleGoogleLogIn }) => {
         <Form.Group className="mb-3" controlId="formBasicUsername">
           <Form.Label>Username</Form.Label>
           <InputGroup hasValidation>
-            <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
+            <InputGroup.Text id="inputGroupPrepend">
+              @
+            </InputGroup.Text>
             <Form.Control
               required
               type="text"
@@ -109,7 +114,10 @@ const Login = ({ handleGoogleLogIn }) => {
         or
       </Form>
       <div>
-        <div id="gSignInWrapper" onClick={(e) => handleGoogleLogIn(e)}>
+        <div
+          id="gSignInWrapper"
+          onClick={(e) => handleGoogleLogIn(e)}
+        >
           <div id="customBtn" class="customGPlusSignIn">
             <span class="icon"></span>
             <span class="buttonText">Continue with Google</span>
@@ -119,7 +127,9 @@ const Login = ({ handleGoogleLogIn }) => {
       <div className="navigateBtn">
         Don't have an account?
         <br />
-        <Button onClick={() => navigate("/register")}>Register</Button>
+        <Button onClick={() => navigate("/register")}>
+          Register
+        </Button>
       </div>
     </>
   );

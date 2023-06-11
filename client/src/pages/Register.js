@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState, useContext } from "react";
 import { Form, Button } from "react-bootstrap";
 import axios from "../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../Context/AuthContext";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -15,7 +16,8 @@ const initialState = {
 const Register = ({ handleGoogleLogIn }) => {
   const [formData, setFormData] = useState(initialState);
   const [validated, setValidated] = useState(false);
-  const [user, setUser] = useState("");
+
+  const { user } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -120,10 +122,10 @@ const Register = ({ handleGoogleLogIn }) => {
       </Form>
 
       <div id="gSignInWrapper" onClick={(e) => handleGoogleLogIn(e)}>
-        <span class="label"></span>
-        <div id="customBtn" class="customGPlusSignIn">
-          <span class="icon"></span>
-          <span class="buttonText">Continue with Google</span>
+        <span className="label"></span>
+        <div id="customBtn" className="customGPlusSignIn">
+          <span className="icon"></span>
+          <span className="buttonText">Continue with Google</span>
         </div>
       </div>
     </>

@@ -8,7 +8,7 @@ import "./css/Navbar.css";
 
 const Navbar = () => {
   const { user } = useContext(AuthContext);
-  console.log(user);
+
   if (user) {
     return (
       <nav className="navbar navbar-expand navbar-white bg-white">

@@ -118,9 +118,9 @@ const Login = ({ handleGoogleLogIn }) => {
           id="gSignInWrapper"
           onClick={(e) => handleGoogleLogIn(e)}
         >
-          <div id="customBtn" class="customGPlusSignIn">
-            <span class="icon"></span>
-            <span class="buttonText">Continue with Google</span>
+          <div id="customBtn" className="customGPlusSignIn">
+            <span className="icon"></span>
+            <span className="buttonText">Continue with Google</span>
           </div>
         </div>
       </div>

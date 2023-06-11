@@ -38,6 +38,7 @@ const Login = ({ handleGoogleLogIn }) => {
     try {
       const response = await axios.post("api/auth/login", formData);
       setUser(response.data);
+      localStorage.setItem("user", JSON.stringify(response.data)); 
       navigate("/");
       navigate(0);
     } catch (error) {

@@ -12,6 +12,7 @@ const Homepage = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [comment, setComment] = useState(initialComment);
+  const [likes, setLikes] = useState(0);
   const [error, setError] = useState("");
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const axiosPrivate = useAxiosPrivate();
@@ -22,9 +23,7 @@ const Homepage = () => {
     async function fetchPosts() {
       let response;
       if (showFollowedPosts) {
-        response = await axios.get(
-          `/api/posts/following/${storedUser._id}`
-        );
+        response = await axios.get(`/api/posts/following/${storedUser._id}`);
       } else {
         response = await axios.get("/api/posts");
       }
@@ -32,14 +31,17 @@ const Homepage = () => {
       setLoading(false);
     }
     fetchPosts();
-  }, []);
+  }, [showFollowedPosts, likes]);
 
   const handleLike = async (postId) => {
     const req = { user_id: storedUser._id };
-    await axiosPrivate
+    const response = await axiosPrivate
       .put(`/posts/like/${postId}`, req)
       .then((res) => {
         console.log(res);
+        toast.success("Liked!");
+        const updatedLikesLength = res.data.updatedPost.likes.length;
+        setLikes(updatedLikesLength);  
       })
       .catch((err) => {
         console.log(err);
@@ -87,31 +89,30 @@ const Homepage = () => {
   if (loading) {
     return <Loading />;
   }
-  console.log(posts);
+
   return (
     <div className="posts-container">
       {storedUser ? (
         <>
-          <Button
-            className="bootBtn"
-            onClick={() => setShowFollowedPosts(false)}
-          >
-            All Posts
-          </Button>
-          <Button
-            className="bootBtn"
-            onClick={() => setShowFollowedPosts(true)}
-          >
-            Following
-          </Button>
+          <div>
+            <Button
+              className="bootBtn"
+              onClick={() => setShowFollowedPosts(false)}
+            >
+              All Posts
+            </Button>
+            <Button
+              className="bootBtn"
+              onClick={() => setShowFollowedPosts(true)}
+            >
+              Following
+            </Button>
+          </div>
         </>
       ) : (
         <div className="username">
           Welcome to TGram! Have an account?
-          <Button
-            className="bootBtn"
-            onClick={() => navigate("/login")}
-          >
+          <Button className="bootBtn" onClick={() => navigate("/login")}>
             Login
           </Button>
         </div>

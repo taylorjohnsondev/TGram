@@ -32,7 +32,7 @@ const Homepage = () => {
       setLoading(false);
     }
     fetchPosts();
-  }, []); // IF we put comments in the dependancy array, everytime you type in the comment input it fires a get request.
+  }, []);
 
   const handleLike = async (postId) => {
     const req = { user_id: storedUser._id };
@@ -63,7 +63,19 @@ const Homepage = () => {
         user_id: storedUser._id,
       })
       .then((res) => {
-        console.log(res.data);
+        const { updatedPost } = res.data;
+
+        const updatedPosts = posts.map((post) => {
+          if (post._id === updatedPost._id) {
+            return {
+              ...updatedPost,
+              author: post.author,
+            };
+          }
+          return post;
+        });
+        setPosts(updatedPosts);
+
         setComment(initialComment);
       })
       .catch((err) => {
@@ -75,7 +87,7 @@ const Homepage = () => {
   if (loading) {
     return <Loading />;
   }
-
+  console.log(posts);
   return (
     <div className="posts-container">
       {storedUser ? (
@@ -105,17 +117,15 @@ const Homepage = () => {
         </div>
       )}
       {posts.map((post) => (
-        <>
-          <Post
-            post={post}
-            error={error}
-            key={post._id}
-            handleLike={handleLike}
-            handleCommentInput={handleCommentInput}
-            comment={comment}
-            handleCommentSubmit={handleCommentSubmit}
-          />
-        </>
+        <Post
+          post={post}
+          error={error}
+          key={post._id}
+          handleLike={handleLike}
+          handleCommentInput={handleCommentInput}
+          comment={comment}
+          handleCommentSubmit={handleCommentSubmit}
+        />
       ))}
     </div>
   );

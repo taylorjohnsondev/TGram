@@ -11,6 +11,7 @@ import Post from "../components/Post";
 import Loading from "../components/Loading";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { checkWhichProfilePic } from "../utils/checkProfilePic";
 
 const initialComment = { text: "" };
 
@@ -45,7 +46,10 @@ const Profile = () => {
     postData.append("text", text);
     postData.append("file", file);
     try {
-      const response = await axios.post(`/posts/${params._id}`, postData);
+      const response = await axios.post(
+        `/posts/${params._id}`,
+        postData
+      );
 
       setPosts([...posts, response.data]);
       setForm(false);
@@ -61,8 +65,9 @@ const Profile = () => {
     await axiosPrivate
       .put(`/users/follow/${params._id}`)
       .then((res) => {
-        const followers = res.data.userToUpdate.followers;
         console.log(res);
+        const followers = res.data.userBeingFollowed.followers;
+
         setFollowers([...followers, followers]);
         console.log(followers);
       })
@@ -70,20 +75,6 @@ const Profile = () => {
         console.log(err);
         setError(err.response.data.error);
       });
-  };
-
-  //check if user has a photo from google
-  //check if user has a custom avatar
-  //if not use user.picture which is default
-  //takes user object
-  const checkForGooglePic = (user) => {
-    if (user.picture.startsWith("uploads/")) {
-      return user.picture;
-    } else if (user.googlePicture) {
-      return user.googlePicture;
-    } else {
-      return user.picture;
-    }
   };
 
   useEffect(() => {
@@ -121,8 +112,6 @@ const Profile = () => {
   const handleCommentSubmit = async (event, postId) => {
     event.preventDefault();
 
-    console.log(event);
-
     await axiosPrivate
       .put(`posts/comment/${postId}`, {
         text: comment.text,
@@ -142,7 +131,10 @@ const Profile = () => {
   return (
     <div className="profile-container">
       <div className="profile-avatar">
-        <img src={`/${checkForGooglePic(user)}`} alt="User Avatar" />
+        <img
+          src={`${checkWhichProfilePic(user)}`}
+          alt="User Avatar"
+        />
       </div>
       <div className="profile-name">{user.nickname}</div>
       <div className="profile-username">{`${user.username}`}</div>
@@ -161,7 +153,10 @@ const Profile = () => {
             </h1>
             {form && (
               <div className="profile-newpost-form">
-                <Form onSubmit={handlePost} encType="multipart/form-data">
+                <Form
+                  onSubmit={handlePost}
+                  encType="multipart/form-data"
+                >
                   <Form.Group controlId="formBasicText">
                     <Form.Label>Caption:</Form.Label>
                     <Form.Control as="textarea" name="text" />
@@ -178,16 +173,15 @@ const Profile = () => {
               </div>
             )}
             {posts.map((post) => (
-              <>
-                <Post
-                  post={post}
-                  key={post._id}
-                  handleLike={handleLike}
-                  handleCommentInput={handleCommentInput}
-                  comment={comment}
-                  handleCommentSubmit={handleCommentSubmit}
-                />
-              </>
+              <Post
+                post={post}
+                key={post._id}
+                handleLike={handleLike}
+                handleCommentInput={handleCommentInput}
+                comment={comment}
+                handleCommentSubmit={handleCommentSubmit}
+                checkWhichProfilePic={checkWhichProfilePic}
+              />
             ))}
           </div>
         </div>

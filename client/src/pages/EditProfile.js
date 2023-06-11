@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { Form, Button, InputGroup } from "react-bootstrap";
 import axios from "../hooks/useAxios";
 import { toast } from "react-toastify";
+import { AuthContext } from "../Context/AuthContext";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { useNavigate } from "react-router-dom";
 import AvatarEditor from "../components/Avatar/AvatarEditor";
@@ -10,9 +11,11 @@ import AvatarEditor from "../components/Avatar/AvatarEditor";
 const EditProfile = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const [user, setUser] = useState({});
+
   const [validated, setValidated] = useState(false);
   const axiosPrivate = useAxiosPrivate();
+  const { user, setUser } = useContext(AuthContext);
+
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const [formData, setFormData] = useState({
     username: "",

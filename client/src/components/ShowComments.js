@@ -9,9 +9,12 @@ const ShowComments = ({ post }) => {
           <Card.Header style={{ textAlign: "center" }}>
             <Card.Img
               src={
-                comment.author.googlePicture
-                  ? comment.author.googlePicture
-                  : comment.author.picture
+                comment.author.picture !== "/defaultpicture.png"
+                  ? `/${comment.author.picture}`
+                  : `${
+                      comment.author.googlePicture ||
+                      "/defaultpicture.png"
+                    }`
               }
               style={{
                 width: "25px",

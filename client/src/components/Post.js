@@ -24,15 +24,18 @@ const Post = ({
         <div className="username">{post.author.username}</div>
         {isHomePage && (
           <Button
-            className="pictureBtn" 
+            className="pictureBtn"
             onClick={() => navigate(`users/${post.author._id}`)}
           >
             <img
               className="post-picture"
               src={
-                post.author.googlePicture
-                  ? post.author.googlePicture
-                  : post.author.picture
+                post.author.picture !== "/defaultpicture.png"
+                  ? `/${post.author.picture}`
+                  : `${
+                      post.author.googlePicture ||
+                      "/defaultpicture.png"
+                    }`
               }
             ></img>
           </Button>

@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../Context/AuthContext";
 import { BiHomeAlt2 } from "react-icons/bi";
 import { CgLogIn } from "react-icons/cg";
 import { CgProfile } from "react-icons/cg";
 import "./css/Navbar.css";
 
 const Navbar = () => {
-  const [user, setUser] = useState(null);
+  const { user } = useContext(AuthContext);
 
-  useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("user"));
-    setUser(userData);
-  }, [localStorage.getItem("user")]); 
- 
   if (user) {
     return (
       <nav className="navbar navbar-expand navbar-white bg-white">

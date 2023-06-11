@@ -46,7 +46,11 @@ router.put("/follow/:_id", verifyJWT, async (req, res, next) => {
   }
 
   try {
-    const userBeingFollowed = await User.findById(_id);
+    const userBeingFollowed = await User.findById(_id).populate({
+      path: "followers",
+      select: ["_id", "username", "email", "picture"],
+    });
+
     const userDoingFollowing = await User.findById(follower);
 
     // Check if the user is already being followed

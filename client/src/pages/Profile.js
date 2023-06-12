@@ -23,6 +23,8 @@ const Profile = () => {
   const [error, setError] = useState(false);
   const [followers, setFollowers] = useState([]);
   const [comment, setComment] = useState(initialComment);
+  const [likes, setLikes] = useState(0);
+
   const axiosPrivate = useAxiosPrivate();
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const [loading, setLoading] = useState(true);
@@ -88,20 +90,24 @@ const Profile = () => {
       setLoading(false);
     }
     fetchUser();
-  }, [params._id, posts.length, comment]);
+  }, [params._id, posts.length, comment, likes]); 
 
   const handleLike = async (postId) => {
     const req = { user_id: storedUser._id };
-    await axiosPrivate
+    const response = await axiosPrivate
       .put(`/posts/like/${postId}`, req)
       .then((res) => {
         console.log(res);
+        toast.success("Liked!");
+        const updatedLikesLength = res.data.updatedPost.likes.length;
+        setLikes(updatedLikesLength);  
       })
       .catch((err) => {
         console.log(err);
+        setError(err.response.data.error);
         toast.error(err.response.data.error);
       });
-  };
+  }; 
 
   const handleCommentInput = (event) => {
     setComment({

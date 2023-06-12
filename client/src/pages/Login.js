@@ -38,7 +38,7 @@ const Login = ({ handleGoogleLogIn }) => {
     try {
       const response = await axios.post("api/auth/login", formData);
       setUser(response.data);
-      localStorage.setItem("user", JSON.stringify(response.data)); 
+      localStorage.setItem("user", JSON.stringify(response.data));
       navigate("/");
       navigate(0);
     } catch (error) {
@@ -59,8 +59,10 @@ const Login = ({ handleGoogleLogIn }) => {
     return (
       <div className="logout-container">
         <div className="logout-card">
-          @{user.username}, are you sure you want to log out?
-          <br />
+          {user.username}, are you sure you want to log out?
+          <Button className="bootBtn" onClick={() => navigate("/")}>
+            Go Back
+          </Button>
           <Button className="bootBtn" onClick={handleLogout}>
             Log out
           </Button>
@@ -76,9 +78,7 @@ const Login = ({ handleGoogleLogIn }) => {
         <Form.Group className="mb-3" controlId="formBasicUsername">
           <Form.Label>Username</Form.Label>
           <InputGroup hasValidation>
-            <InputGroup.Text id="inputGroupPrepend">
-              @
-            </InputGroup.Text>
+            <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
             <Form.Control
               required
               type="text"
@@ -115,10 +115,7 @@ const Login = ({ handleGoogleLogIn }) => {
         or
       </Form>
       <div>
-        <div
-          id="gSignInWrapper"
-          onClick={(e) => handleGoogleLogIn(e)}
-        >
+        <div id="gSignInWrapper" onClick={(e) => handleGoogleLogIn(e)}>
           <div id="customBtn" className="customGPlusSignIn">
             <span className="icon"></span>
             <span className="buttonText">Continue with Google</span>
@@ -128,9 +125,7 @@ const Login = ({ handleGoogleLogIn }) => {
       <div className="navigateBtn">
         Don't have an account?
         <br />
-        <Button onClick={() => navigate("/register")}>
-          Register
-        </Button>
+        <Button onClick={() => navigate("/register")}>Register</Button>
       </div>
     </>
   );

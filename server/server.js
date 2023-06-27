@@ -85,7 +85,7 @@ if (NODE_ENV === "production") {
 
   app.all("*", (req, res, next) => {
     res.sendFile(
-      path.resolve(__dirname, "../client/dist/index.html")
+      path.resolve(__dirname, "../client/build/index.html")
     );
   });
 }

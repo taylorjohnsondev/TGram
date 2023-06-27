@@ -87,10 +87,9 @@ connectDB();
 if (NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/build")));
 
-  app.use(express.static(path.join(__dirname, "./uploads")));
   app.use(
     "/uploads",
-    express.static(path.join(__dirname, "uploads"))
+    express.static(path.resolve(__dirname, "./uploads"))
   );
 
   app.all("*", (req, res, next) => {

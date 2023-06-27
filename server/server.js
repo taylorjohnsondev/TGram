@@ -17,6 +17,18 @@ require("./config/passport")(passport);
 
 const app = express();
 
+app.use(
+  cors({
+    origin: [
+      "https://tgram-social.netlify.app",
+      "https://tgram-client.onrender.com",
+      "http://localhost:3000/",
+      "http://localhost:3000",
+    ],
+    credentials: true,
+  })
+);
+
 //Passport.js Middleware
 app.use(passport.initialize());
 app.use(
@@ -41,31 +53,18 @@ app.use(function (req, res, next) {
 });
 
 /* These lines of code are setting up middleware for the Express application: */
-app.use(
-  cors({
-    origin: [
-      "https://tgram-social.netlify.app",
-      "https://tgram-client.onrender.com",
-    ],
-  })
-);
-if (NODE_ENV !== "production") {
-  app.use(morgan("dev"));
-}
 
+app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 //routes
 app.use("/api", require("./routes/index"));
 
 app.get("/uploads/:filename", (req, res) => {
   const filename = req.params.filename;
-  res.sendFile(path.join(__dirname, "./uploads/", filename));
-});
-
-app.get("*", (req, res) => {
-  res.send("No routes matched.", 404);
+  res.sendFile(path.join("/.uploads/", filename));
 });
 
 const url = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@taylorgram.plovuar.mongodb.net/?retryWrites=true&w=majority`;
@@ -79,16 +78,14 @@ async function connectDB() {
   }
 }
 
+app.get("*", (req, res) => {
+  res.send("No routes matched.", 404);
+});
+
 connectDB();
 
 if (NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/build")));
-
-  app.use(express.static(path.join(__dirname, "./uploads")));
-  app.use(
-    "/uploads",
-    express.static(path.join(__dirname, "uploads"))
-  );
 
   app.all("*", (req, res, next) => {
     res.sendFile(

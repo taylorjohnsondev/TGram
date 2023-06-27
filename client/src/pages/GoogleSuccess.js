@@ -33,9 +33,11 @@ const GoogleSuccess = () => {
 
     localStorage.setItem("token", JSON.stringify(token));
 
-    const interval = setInterval(() => navigate("/"), 0.5);
+    const timeout = setTimeout(() => {
+      navigate("/");
+    }, 1000);
 
-    return () => clearInterval(interval);
+    return () => clearTimeout(timeout);
   }, [navigate]);
 
   return <h1>Success ...redirecting.</h1>;

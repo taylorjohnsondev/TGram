@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { Form, Button, InputGroup } from "react-bootstrap";
-import axios from "axios";
+import axios from "../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthContext";
 import { toast } from "react-toastify";
@@ -35,7 +35,7 @@ const Login = ({ handleGoogleLogIn }) => {
       e.stopPropagation();
     }
     try {
-      const response = await axios.post("api/auth/login", formData);
+      const response = await axios.post("/auth/login", formData);
       setUser(response.data);
       localStorage.setItem("user", JSON.stringify(response.data));
       navigate("/");

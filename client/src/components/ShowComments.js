@@ -13,8 +13,8 @@ const ShowComments = ({ post }) => {
           >
             <Card.Img
               src={
-                comment.author.picture !== "/defaultpicture.png"
-                  ? `/${comment.author.picture}`
+                comment.author?.picture !== "/defaultpicture.png"
+                  ? `/${comment.author?.picture}`
                   : `${
                       comment.author.googlePicture ||
                       "/defaultpicture.png"
@@ -22,8 +22,8 @@ const ShowComments = ({ post }) => {
               }
               className="profile-picture"
             />
-            <Link to={`/users/${comment.author._id}`} id="username">
-              @{comment.author.username}
+            <Link to={`/users/${comment.author?._id}`} id="username">
+              @{comment.author?.username}
             </Link>
           </Card.Header>
           <Card.Body className="card-body">

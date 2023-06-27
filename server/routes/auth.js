@@ -61,7 +61,12 @@ router.post(
               res.send({ token, username, _id: user.id });
             })
             .catch((err) => {
-              console.log(err);
+              if (err.code === 11000) {
+                res
+                  .status(422)
+                  .json({ error: "Email already registered." });
+                console.log(err);
+              }
             });
         });
       })

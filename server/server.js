@@ -17,8 +17,6 @@ require("./config/passport")(passport);
 
 const app = express();
 
-console.log(NODE_ENV);
-
 //Passport.js Middleware
 app.use(passport.initialize());
 app.use(
@@ -43,7 +41,7 @@ app.use(function (req, res, next) {
 });
 
 /* These lines of code are setting up middleware for the Express application: */
-app.use(cors());
+app.use(cors({ origin: "https://tgram-social.netlify.app/" }));
 if (NODE_ENV !== "production") {
   app.use(morgan("dev"));
 }

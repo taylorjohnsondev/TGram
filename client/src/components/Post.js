@@ -24,7 +24,7 @@ const Post = ({
   return (
     <>
       <div key={post._id} className="post-container">
-        <div className="username">@{post.author.username}</div>
+        <div className="username">@{post.author?.username}</div>
         {isHomePage && (
           <Button
             className="pictureBtn"
@@ -33,8 +33,8 @@ const Post = ({
             <img
               className="post-picture"
               src={
-                post.author.picture !== "/defaultpicture.png"
-                  ? `/${post.author.picture}`
+                post?.author?.picture !== "/defaultpicture.png"
+                  ? `/${post.author?.picture}`
                   : `${
                       post.author.googlePicture ||
                       "/defaultpicture.png"

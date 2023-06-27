@@ -23,10 +23,17 @@ const Homepage = () => {
     async function fetchPosts() {
       let response;
       if (showFollowedPosts) {
-        response = await axios.get(`/api/posts/following/${storedUser._id}`);
+        response = await axios.get(
+          `/api/posts/following/${storedUser._id}`
+        );
       } else {
         response = await axios.get("/api/posts");
       }
+
+      if (response.status === 204) {
+        toast.error("You are not following anyone yet.");
+      }
+
       setPosts(response.data);
       setLoading(false);
     }
@@ -41,7 +48,7 @@ const Homepage = () => {
         console.log(res);
         toast.success("Liked!");
         const updatedLikesLength = res.data.updatedPost.likes.length;
-        setLikes(updatedLikesLength);  
+        setLikes(updatedLikesLength);
       })
       .catch((err) => {
         console.log(err);
@@ -112,22 +119,26 @@ const Homepage = () => {
       ) : (
         <div className="username">
           Welcome to TGram! Have an account?
-          <Button className="bootBtn" onClick={() => navigate("/login")}>
+          <Button
+            className="bootBtn"
+            onClick={() => navigate("/login")}
+          >
             Login
           </Button>
         </div>
       )}
-      {posts.map((post) => (
-        <Post
-          post={post}
-          error={error}
-          key={post._id}
-          handleLike={handleLike}
-          handleCommentInput={handleCommentInput}
-          comment={comment}
-          handleCommentSubmit={handleCommentSubmit}
-        />
-      ))}
+      {posts &&
+        posts.map((post) => (
+          <Post
+            post={post}
+            error={error}
+            key={post._id}
+            handleLike={handleLike}
+            handleCommentInput={handleCommentInput}
+            comment={comment}
+            handleCommentSubmit={handleCommentSubmit}
+          />
+        ))}
     </div>
   );
 };

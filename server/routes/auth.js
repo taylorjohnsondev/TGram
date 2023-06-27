@@ -131,7 +131,9 @@ router.get(
   (req, res) => {
     const { user, token } = req.user;
 
-    res.redirect(`/googleSuccess/?token=${token}`);
+    res.redirect(
+      `https://tgram-client.onrender.com/googleSuccess/?token=${token}`
+    );
   }
 );
 

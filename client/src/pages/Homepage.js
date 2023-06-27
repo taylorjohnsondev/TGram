@@ -42,7 +42,7 @@ const Homepage = () => {
 
   const handleLike = async (postId) => {
     const req = { user_id: storedUser._id };
-    const response = await axiosPrivate
+    await axiosPrivate
       .put(`/posts/like/${postId}`, req)
       .then((res) => {
         console.log(res);

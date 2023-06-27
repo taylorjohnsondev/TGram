@@ -10,11 +10,14 @@ const {
   DB_USERNAME,
   DB_PASSWORD,
   SESSION_SECRET,
+  NODE_ENV,
 } = require("./config/constants");
 
 require("./config/passport")(passport);
 
 const app = express();
+
+console.log(NODE_ENV);
 
 //Passport.js Middleware
 app.use(passport.initialize());
@@ -41,7 +44,10 @@ app.use(function (req, res, next) {
 
 /* These lines of code are setting up middleware for the Express application: */
 app.use(cors());
-app.use(morgan("dev"));
+if (NODE_ENV !== "production") {
+  app.use(morgan("dev"));
+}
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -51,6 +57,10 @@ app.use("/api", require("./routes/index"));
 app.get("/uploads/:filename", (req, res) => {
   const filename = req.params.filename;
   res.sendFile(path.join(__dirname, "./uploads/", filename));
+});
+
+app.get("*", (req, res) => {
+  res.send("No routes matched.", 404);
 });
 
 const url = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@taylorgram.plovuar.mongodb.net/?retryWrites=true&w=majority`;
@@ -66,6 +76,21 @@ async function connectDB() {
 
 connectDB();
 
+if (NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../client/build")));
+
+  app.use(express.static(path.join(__dirname, "./uploads")));
+  app.use(
+    "/uploads",
+    express.static(path.join(__dirname, "uploads"))
+  );
+
+  app.all("*", (req, res, next) => {
+    res.sendFile(
+      path.resolve(__dirname, "../client/dist/index.html")
+    );
+  });
+}
 app.listen(3001, () => {
   console.log("Server running on port 3001");
 });

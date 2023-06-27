@@ -205,16 +205,14 @@ const Profile = () => {
           <div className="profile-posts">
             <h1 className="profile-h1">Posts</h1>
             {posts.map((post) => (
-              <>
-                <Post
-                  post={post}
-                  key={post._id}
-                  handleLike={handleLike}
-                  handleCommentInput={handleCommentInput}
-                  comment={comment}
-                  handleCommentSubmit={handleCommentSubmit}
-                />
-              </>
+              <Post
+                post={post}
+                key={post._id}
+                handleLike={handleLike}
+                handleCommentInput={handleCommentInput}
+                comment={comment}
+                handleCommentSubmit={handleCommentSubmit}
+              />
             ))}
           </div>
         </div>

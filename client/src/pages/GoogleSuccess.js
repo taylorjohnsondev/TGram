@@ -6,7 +6,7 @@ import { AuthContext } from "../Context/AuthContext";
 const GoogleSuccess = () => {
   const navigate = useNavigate();
 
-  const { setUser, user } = useContext(AuthContext);
+  const { setUser } = useContext(AuthContext);
 
   /**
    * This function fetches the authenticated Google user's data and stores it in local storage.

@@ -1,12 +1,17 @@
 .container {
-  border: 2px solid gray;
   display: flex;
   flex-direction: column;
+  border: 2px solid #ddd;
   border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 100%;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 .title {
-  text-align: center;
+  align-self: center;
   margin-bottom: 5px;
   font-weight: 500;
   font-size: medium;

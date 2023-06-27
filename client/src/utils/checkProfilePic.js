@@ -4,7 +4,10 @@
  * @returns {string} - The URL of the user's profile picture, or default picture.
  */
 export function checkWhichProfilePic(user) {
-  if (user?.picture?.startsWith("uploads")) {
+  if (
+    user?.picture?.startsWith("uploads") ||
+    user?.picture?.startsWith("/uploads")
+  ) {
     return `/${user.picture}`;
   } else if (user?.googlePicture) {
     return user.googlePicture;

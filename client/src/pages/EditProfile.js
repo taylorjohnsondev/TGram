@@ -14,7 +14,7 @@ const EditProfile = () => {
 
   const [validated, setValidated] = useState(false);
   const axiosPrivate = useAxiosPrivate();
-  const { user, setUser } = useContext(AuthContext);
+  const { setUser } = useContext(AuthContext);
 
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const [formData, setFormData] = useState({
@@ -45,13 +45,10 @@ const EditProfile = () => {
       e.stopPropagation();
     } else {
       try {
-        const response = await axiosPrivate.put(
-          `/users/${params._id}/edit`,
-          {
-            username: formData.username,
-            password: formData.password,
-          }
-        );
+        await axiosPrivate.put(`/users/${params._id}/edit`, {
+          username: formData.username,
+          password: formData.password,
+        });
         toast.success("Profile Updated");
       } catch (error) {
         toast.error(error.response.data.error);

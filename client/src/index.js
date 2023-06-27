@@ -5,6 +5,12 @@ import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { ProvideAuth } from "./Context/AuthContext";
+import { disableReactDevTools } from "@fvilers/disable-react-devtools";
+import { NODE_ENV } from "./configs/constants";
+
+if (NODE_ENV === "production") {
+  disableReactDevTools();
+}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

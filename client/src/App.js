@@ -7,7 +7,7 @@ import GoogleSuccess from "./pages/GoogleSuccess";
 import Logo from "./components/Logo";
 import { Route, Routes } from "react-router-dom";
 import { API_URL } from "./configs/constants";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import EditProfile from "./pages/EditProfile";
 import "react-toastify/dist/ReactToastify.css";
 

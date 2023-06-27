@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import ModalComment from "./ModalComment";
 import ShowComments from "./ShowComments";
+import { AuthContext } from "../Context/AuthContext";
 import { AiOutlineHeart } from "react-icons/ai";
 import { Button } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -18,10 +19,14 @@ const Post = ({
   const location = useLocation();
   const isHomePage = location.pathname === "/";
 
+  const { user } = useContext(AuthContext);
+
+  console.log(user);
+
   return (
     <>
       <div key={post._id} className="post-container">
-        <div className="username">{post.author.username}</div>
+        <div className="username">@{post.author.username}</div>
         {isHomePage && (
           <Button
             className="pictureBtn"
@@ -49,27 +54,32 @@ const Post = ({
           {new Date(post.time).toLocaleString()}
         </div>
 
-        <div onClick={() => handleLike(post._id)}>
-          {post.likes && post.likes.length >= 0 && (
-            <ShowToolTip post={post}>
-              <AiOutlineHeart
-                size={24}
-                style={{ marginTop: "5px" }}
+        {user && (
+          <>
+            <div onClick={() => handleLike(post._id)}>
+              {post.likes && post.likes.length >= 0 && (
+                <ShowToolTip post={post}>
+                  <AiOutlineHeart
+                    size={24}
+                    style={{ marginTop: "5px" }}
+                  />
+                  {post.likes.length}
+                </ShowToolTip>
+              )}
+            </div>
+            <div className="modal-align">
+              <ModalComment
+                handleCommentInput={handleCommentInput}
+                handleCommentSubmit={handleCommentSubmit}
+                comment={comment}
+                show={showCommentModal}
+                setShow={setShowCommentModal}
+                post={post._id}
               />
-              {post.likes.length}
-            </ShowToolTip>
-          )}
-        </div>
-        <div className="modal-align">
-          <ModalComment
-            handleCommentInput={handleCommentInput}
-            handleCommentSubmit={handleCommentSubmit}
-            comment={comment}
-            show={showCommentModal}
-            setShow={setShowCommentModal}
-            post={post._id}
-          />
-        </div>
+            </div>
+          </>
+        )}
+
         <ShowComments post={post} />
       </div>
     </>

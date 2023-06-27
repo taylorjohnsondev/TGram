@@ -44,7 +44,7 @@ app.use(function (req, res, next) {
 app.use(
   cors({
     origin: [
-      "https://tgram-social.netlify.app/",
+      "https://tgram-social.netlify.app",
       "https://tgram-client.onrender.com",
     ],
   })

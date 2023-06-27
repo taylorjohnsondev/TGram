@@ -17,6 +17,15 @@ require("./config/passport")(passport);
 
 const app = express();
 
+app.use(
+  cors({
+    origin: [
+      "https://tgram-social.netlify.app",
+      "https://tgram-client.onrender.com",
+    ],
+  })
+);
+
 //Passport.js Middleware
 app.use(passport.initialize());
 app.use(
@@ -41,14 +50,7 @@ app.use(function (req, res, next) {
 });
 
 /* These lines of code are setting up middleware for the Express application: */
-app.use(
-  cors({
-    origin: [
-      "https://tgram-social.netlify.app",
-      "https://tgram-client.onrender.com",
-    ],
-  })
-);
+
 if (NODE_ENV !== "production") {
   app.use(morgan("dev"));
 }

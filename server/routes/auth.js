@@ -132,7 +132,7 @@ router.get(
     const { user, token } = req.user;
 
     res.redirect(
-      `https://tgram-client.onrender.com/googleSuccess/?token=${token}`
+      `https://tgram-social.netlify.app/googleSuccess/?token=${token}`
     );
   }
 );

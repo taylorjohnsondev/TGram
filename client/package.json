@@ -2,8 +2,8 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3001",
-  "dependencies": {
+  "proxy": "http://localhost:3001", 
+  "dependencies": { 
     "@fvilers/disable-react-devtools": "^1.3.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

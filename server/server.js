@@ -64,7 +64,7 @@ app.use("/api", require("./routes/index"));
 
 app.get("/uploads/:filename", (req, res) => {
   const filename = req.params.filename;
-  res.sendFile(path.join(__dirname, "uploads", filename));
+  res.sendFile(path.join(__dirname, "../server/uploads", filename));
 });
 
 app.get("*", (req, res) => {
@@ -89,7 +89,7 @@ if (NODE_ENV === "production") {
 
   app.use(
     "/uploads",
-    express.static(path.resolve(__dirname, "./uploads"))
+    express.static(path.resolve(__dirname, "uploads"))
   );
 
   app.all("*", (req, res, next) => {

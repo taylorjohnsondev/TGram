@@ -23,6 +23,7 @@ app.use(
       "https://tgram-social.netlify.app",
       "https://tgram-client.onrender.com",
     ],
+    credentials: true,
   })
 );
 

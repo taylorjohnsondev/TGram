@@ -24,7 +24,7 @@ function App() {
 
     try {
       // Redirect the user to the Google Login URL
-      window.location.href = `http://localhost:3001${API_URL}/auth/google`;
+      window.location.href = `${API_URL}/auth/google`;
     } catch (error) {
       console.log(error);
     }

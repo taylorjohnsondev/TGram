@@ -131,9 +131,7 @@ router.get(
   (req, res) => {
     const { user, token } = req.user;
 
-    res.redirect(
-      `http://localhost:3000/googleSuccess/?token=${token}`
-    );
+    res.redirect(`/googleSuccess/?token=${token}`);
   }
 );
 

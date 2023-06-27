@@ -34,7 +34,7 @@ const Post = ({
               className="post-picture"
               src={
                 post?.author?.picture !== "/defaultpicture.png"
-                  ? `/${post.author?.picture}`
+                  ? `https://tgram-server.onrender.com/${post.author?.picture}`
                   : `${
                       post.author.googlePicture ||
                       "/defaultpicture.png"
@@ -44,8 +44,13 @@ const Post = ({
             />
           </Button>
         )}
+        {/* post.file already had a "/" in front of it. */}
         <div className="photo-container">
-          <img src={post.file} alt="Post Media" className="photo" />
+          <img
+            src={`https://tgram-server.onrender.com${post.file}`}
+            alt="Post Media"
+            className="photo"
+          />
         </div>
         <div className="description">{post.text}</div>
         <div className="post-date">

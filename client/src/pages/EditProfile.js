@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { Form, Button, InputGroup } from "react-bootstrap";
-import axios from "../hooks/useAxios";
 import { toast } from "react-toastify";
 import { AuthContext } from "../Context/AuthContext";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import axios from "../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
 import AvatarEditor from "../components/Avatar/AvatarEditor";
 
@@ -24,7 +24,7 @@ const EditProfile = () => {
 
   useEffect(() => {
     async function fetchUser() {
-      const userData = await axios.get(`/users/${params._id}`);
+      const userData = await axiosPrivate.get(`/users/${params._id}`);
       setUser(userData.data);
       setFormData({ username: userData.data.username });
       if (params._id !== storedUser._id) {
@@ -44,6 +44,7 @@ const EditProfile = () => {
     if (form.checkValidity() === false) {
       e.stopPropagation();
     } else {
+      // This route requires an authorization header which axiosPrivate provides
       try {
         await axiosPrivate.put(`/users/${params._id}/edit`, {
           username: formData.username,

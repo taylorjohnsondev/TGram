@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "npm start --workspace=server",
     "client": "npm start --workspace=client",
-    "start": "concurrently --kill-others-on-fail \"npm run server\"  \"npm run client\""
+    "start": "concurrently --kill-others-on-fail \"npm run server\"  \"npm run client\"",
+    "build": "npm run build --workspace=client" 
   },
   "repository": {
     "type": "git",

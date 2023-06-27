@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
@@ -24,10 +24,10 @@ const Homepage = () => {
       let response;
       if (showFollowedPosts) {
         response = await axios.get(
-          `/api/posts/following/${storedUser._id}`
+          `/posts/following/${storedUser._id}`
         );
       } else {
-        response = await axios.get("/api/posts");
+        response = await axios.get("/posts");
       }
 
       if (response.status === 204) {

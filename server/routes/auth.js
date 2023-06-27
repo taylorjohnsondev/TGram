@@ -4,65 +4,72 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const ensureAuth = require("../middleware/ensureAuth");
+const fileupload = require("../middleware/fileUpload");
 
 router.route("/").get((req, res, next) => {
   res.send("auth endpoint");
 });
 
-router.post("/register", async (req, res) => {
-  const { email, username, password, nickname } = req.body;
+router.post(
+  "/register",
+  fileupload.single("file"),
+  async (req, res) => {
+    const { email, username, password, confirmPassword, nickname } =
+      req.body;
 
-  console.log(req.body);
+    if (password.length < 7) {
+      return res
+        .status(400)
+        .json({ error: "Password must be at least 7 characters" });
+    }
+    if (password !== confirmPassword) {
+      return res.status(400).json({ error: "Passwords must match." });
+    }
 
-  if (password.length < 7) {
-    return res
-      .status(400)
-      .json({ error: "Password must be atleast 7 characters" });
-  }
+    if (!password || !username || !email || !confirmPassword) {
+      return res.status(422).json({ error: "All fields not filled" });
+    }
 
-  if (!password || !username || !email) {
-    return res.status(422).json({ error: "All fields not filled" });
-  }
-
-  User.findOne({ username: username })
-    .then((user) => {
-      if (user) {
-        return res
-          .status(423)
-          .json({ error: "Someone is already using that username" });
-      }
-      bcrypt.hash(password, 12).then((encryptedpass) => {
-        const user = new User({
-          email,
-          username,
-          password: encryptedpass,
-          nickname,
-        });
-
-        const token = jwt.sign(
-          {
-            username: user.username,
-            id: user._id,
-          },
-          process.env.JWT_SECRET
-        );
-
-        user
-          .save()
-          .then((user) => {
-            res.status(200);
-            res.send({ token, username, _id: user.id });
-          })
-          .catch((err) => {
-            console.log(err);
+    User.findOne({ username: username })
+      .then((user) => {
+        if (user) {
+          return res.status(423).json({
+            error: "Someone is already using that username",
           });
+        }
+        bcrypt.hash(password, 12).then((encryptedpass) => {
+          const user = new User({
+            email,
+            username,
+            password: encryptedpass,
+            nickname,
+            picture: req.file ? req.file.path : "/defaultpicture.png",
+          });
+
+          const token = jwt.sign(
+            {
+              username: user.username,
+              id: user._id,
+            },
+            process.env.JWT_SECRET
+          );
+
+          user
+            .save()
+            .then((user) => {
+              res.status(200);
+              res.send({ token, username, _id: user.id });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+  }
+);
 
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;

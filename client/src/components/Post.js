@@ -21,8 +21,6 @@ const Post = ({
 
   const { user } = useContext(AuthContext);
 
-  console.log(user);
-
   return (
     <>
       <div key={post._id} className="post-container">

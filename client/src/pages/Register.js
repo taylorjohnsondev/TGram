@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { Form, Button } from "react-bootstrap";
+import AvatarEditor from "../components/Avatar/AvatarEditor";
 import axios from "../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthContext";
@@ -9,33 +10,55 @@ const initialState = {
   email: "",
   username: "",
   password: "",
+  confirmPassword: "",
   nickname: "",
   error: "",
+  touched: false,
 };
 
 const Register = ({ handleGoogleLogIn }) => {
-  const [formData, setFormData] = useState(initialState);
+  const [formValues, setFormValues] = useState(initialState);
   const [validated, setValidated] = useState(false);
+  const [avatar, setAvatar] = useState("");
 
   const { user } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
   const handleInput = (e) => {
-    setFormData({
-      ...formData,
+    setFormValues({
+      ...formValues,
       [e.target.name]: e.target.value,
+      touched: true,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const { email, username, password, confirmPassword } = formValues;
+
+    if (password !== confirmPassword) {
+      return setFormValues({
+        ...formValues,
+        error: "Passwords must match.",
+      });
+    }
+
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("confirmPassword", confirmPassword);
+
+    formData.append("file", avatar);
+
     const form = e.currentTarget;
     if (form.checkValidity() === false) {
       e.preventDefault();
       e.stopPropagation();
     }
+
     try {
       const response = await axios.post("/auth/register", formData); //the base url already contains /api
       localStorage.setItem("user", JSON.stringify(response.data));
@@ -68,6 +91,8 @@ const Register = ({ handleGoogleLogIn }) => {
 
   return (
     <>
+      <AvatarEditor storedUser={null} setAvatar={setAvatar} />
+
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <h1>Register</h1>
         <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -77,7 +102,7 @@ const Register = ({ handleGoogleLogIn }) => {
             type="email"
             placeholder="Email"
             name="email"
-            value={formData.email}
+            value={formValues.email}
             autoComplete="email"
             onChange={handleInput}
           />
@@ -91,7 +116,7 @@ const Register = ({ handleGoogleLogIn }) => {
             required
             type="text"
             name="username"
-            value={formData.username}
+            value={formValues.username}
             placeholder="Enter username"
             autoComplete="username"
             onChange={handleInput}
@@ -107,13 +132,55 @@ const Register = ({ handleGoogleLogIn }) => {
             type="password"
             placeholder="Password"
             name="password"
-            value={formData.password}
-            autoComplete="current-password"
+            isInvalid={formValues.password.length < 7}
+            value={formValues.password}
+            autoComplete="new-password"
             onChange={handleInput}
           />
-          <Form.Control.Feedback type="invalid">
-            Please enter your password.
-          </Form.Control.Feedback>
+          {formValues.password.length < 7 &&
+          formValues.password !== "" ? (
+            <Form.Control.Feedback type="invalid">
+              Password must be at least 7 characters.
+            </Form.Control.Feedback>
+          ) : (
+            <Form.Control.Feedback type="invalid">
+              Please enter a password.
+            </Form.Control.Feedback>
+          )}
+        </Form.Group>
+        <Form.Group
+          className="mb-3"
+          controlId="confirmFormBasicPassword"
+        >
+          <Form.Label>Confirm Password</Form.Label>
+          <Form.Control
+            required
+            type="password"
+            isValid={
+              formValues.confirmPassword === formValues.password &&
+              formValues.touched
+            }
+            isInvalid={
+              formValues.confirmPassword !== formValues.password &&
+              formValues.confirmPassword !== "" &&
+              formValues.touched
+            }
+            placeholder="Confirm Password"
+            name="confirmPassword"
+            value={formValues.confirmPassword}
+            autoComplete="new-password"
+            onChange={handleInput}
+          />
+          {formValues.confirmPassword !== formValues.password &&
+          formValues.confirmPassword !== "" ? (
+            <Form.Control.Feedback type="invalid">
+              Passwords don't match.
+            </Form.Control.Feedback>
+          ) : (
+            <Form.Control.Feedback type="invalid">
+              Please confirm your password.
+            </Form.Control.Feedback>
+          )}
         </Form.Group>
         <Button variant="primary" type="submit">
           Submit

@@ -171,7 +171,6 @@ router.put(
   async (req, res, next) => {
     const { _id } = req.params;
     const { text, user_id } = req.body;
-    console.log(_id);
 
     const comment = {
       text: text,

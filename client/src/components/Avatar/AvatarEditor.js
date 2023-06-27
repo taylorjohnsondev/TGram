@@ -23,7 +23,7 @@ import {
 import "../Avatar/SectionWrapper/index.css";
 import { toast } from "react-toastify";
 
-const AvatarEditor = ({ storedUser }) => {
+const AvatarEditor = ({ storedUser, setAvatar }) => {
   const [features, setFeatures] = useState(facialFeatures);
   const [file, setFile] = useState("");
   const [choose, setChoose] = useState(false);
@@ -175,10 +175,21 @@ const AvatarEditor = ({ storedUser }) => {
         width: node.offsetWidth * scale,
       });
 
-      const file = new File([blob], `${storedUser.username}.png`, {
-        type: blob.type,
-      });
+      const file = new File(
+        [blob],
+        `${
+          storedUser
+            ? storedUser.username
+            : "new-user" + Math.floor(Math.random() * 1000) + 1
+        }.png`,
+        {
+          type: blob.type,
+        }
+      );
       setFile(file);
+      if (setAvatar) {
+        setAvatar(file);
+      }
     }
   };
 
@@ -199,8 +210,8 @@ const AvatarEditor = ({ storedUser }) => {
               handleFeatureChange={handleSkinColor}
             >
               <Face
-                maskId={storedUser._id}
-                pathId={storedUser._id}
+                maskId={storedUser ? storedUser._id : ""}
+                pathId={storedUser ? storedUser._id : ""}
                 color={"#964B00"}
               />
             </SectionWrapper>
@@ -254,7 +265,7 @@ const AvatarEditor = ({ storedUser }) => {
               tip="Mouth"
               handleFeatureChange={handleMouth}
             >
-              <Mouth id={storedUser._id} />
+              <Mouth id={storedUser ? storedUser._id : "test"} />
             </SectionWrapper>
             <SectionWrapper
               className={"section-item"}
@@ -310,15 +321,23 @@ const AvatarEditor = ({ storedUser }) => {
           >
             {choose ? "Selection Confirmed" : "Set my avatar"}
           </button>
+
+          {/* upload button only accessible for an already registered user */}
+          {storedUser ? (
+            <button
+              className="uploadIt"
+              hidden={avatarUploaded || !choose}
+              onClick={handleUpload}
+            >
+              Upload it
+            </button>
+          ) : (
+            ""
+          )}
+
           <button
-            className="uploadIt"
-            hidden={avatarUploaded || !choose}
-            onClick={handleUpload}
-          >
-            Upload it
-          </button>
-          <button
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               setChoose(false);
               setFeatures(facialFeatures);
               setAvatarUploaded(false);

@@ -18,7 +18,6 @@ const Login = ({ handleGoogleLogIn }) => {
 
   const [formData, setFormData] = useState(initialState);
   const [validated, setValidated] = useState(false);
-  console.log(user);
 
   const handleInput = (e) => {
     setFormData({
@@ -78,7 +77,9 @@ const Login = ({ handleGoogleLogIn }) => {
         <Form.Group className="mb-3" controlId="formBasicUsername">
           <Form.Label>Username</Form.Label>
           <InputGroup hasValidation>
-            <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
+            <InputGroup.Text id="inputGroupPrepend">
+              @
+            </InputGroup.Text>
             <Form.Control
               required
               type="text"
@@ -115,7 +116,10 @@ const Login = ({ handleGoogleLogIn }) => {
         or
       </Form>
       <div>
-        <div id="gSignInWrapper" onClick={(e) => handleGoogleLogIn(e)}>
+        <div
+          id="gSignInWrapper"
+          onClick={(e) => handleGoogleLogIn(e)}
+        >
           <div id="customBtn" className="customGPlusSignIn">
             <span className="icon"></span>
             <span className="buttonText">Continue with Google</span>
@@ -125,7 +129,9 @@ const Login = ({ handleGoogleLogIn }) => {
       <div className="navigateBtn">
         Don't have an account?
         <br />
-        <Button onClick={() => navigate("/register")}>Register</Button>
+        <Button onClick={() => navigate("/register")}>
+          Register
+        </Button>
       </div>
     </>
   );

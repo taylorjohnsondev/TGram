@@ -72,7 +72,6 @@ const Profile = () => {
         const followers = res.data.userBeingFollowed.followers;
 
         setFollowers([...followers, followers]);
-        console.log(followers);
       })
       .catch((err) => {
         console.log(err);

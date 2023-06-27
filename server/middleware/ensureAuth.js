@@ -9,7 +9,7 @@ module.exports = {
 
       return next();
     } else {
-      res.redirect("http://localhost:3000/login");
+      res.redirect("/login");
     }
   },
   /* `ensureGuest` is a middleware function that checks if the user is not authenticated. If the user
@@ -21,7 +21,7 @@ module.exports = {
     if (!req.isAuthenticated()) {
       return next();
     } else {
-      res.redirect("http://localhost:3000/login");
+      res.redirect("/login");
     }
   },
 };

@@ -132,7 +132,7 @@ router.get(
     const { user, token } = req.user;
 
     res.redirect(
-      `http://localhost:3000/googleSuccess/?token=${token}`
+      `https://tgram-client.onrender.com/googleSuccess/?token=${token}`
     );
   }
 );

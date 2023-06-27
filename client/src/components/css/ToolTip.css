@@ -22,3 +22,26 @@
   visibility: visible;
   opacity: 1;
 }
+
+/* for when the tool tip is used to hover over the create a post icon */
+
+.tooltip-create-post.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip-create-post {
+  visibility: hidden;
+  position: absolute;
+  font-size: 14px;
+  top: -40px;
+  left: 20%;
+  transform: translateX(-50%);
+  background-color: #000;
+  color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: auto;
+}

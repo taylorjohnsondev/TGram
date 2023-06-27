@@ -21,6 +21,10 @@
   text-decoration: none;
 }
 
+.Link:hover {
+  color: aquamarine;
+}
+
 li {
   margin-left: 1px;
 }

@@ -37,24 +37,30 @@ const Post = ({
                       "/defaultpicture.png"
                     }`
               }
-            ></img>
+              alt="user avatar"
+            />
           </Button>
         )}
         <div className="photo-container">
           <img src={post.file} alt="Post Media" className="photo" />
         </div>
         <div className="description">{post.text}</div>
-        <div>{new Date(post.time).toLocaleString()}</div>
+        <div className="post-date">
+          {new Date(post.time).toLocaleString()}
+        </div>
 
         <div onClick={() => handleLike(post._id)}>
           {post.likes && post.likes.length >= 0 && (
             <ShowToolTip post={post}>
-              <AiOutlineHeart />
+              <AiOutlineHeart
+                size={24}
+                style={{ marginTop: "5px" }}
+              />
               {post.likes.length}
             </ShowToolTip>
           )}
         </div>
-        <div>
+        <div className="modal-align">
           <ModalComment
             handleCommentInput={handleCommentInput}
             handleCommentSubmit={handleCommentSubmit}

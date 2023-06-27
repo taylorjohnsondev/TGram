@@ -8,6 +8,26 @@ const ShowToolTip = ({
 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
+  if (!post) {
+    return (
+      <div
+        className="tooltip-container"
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+      >
+        <span
+          className={`tooltip-create-post ${
+            showTooltip ? "show" : ""
+          }`}
+        >
+          create a post
+        </span>
+
+        {children}
+      </div>
+    );
+  }
+
   return (
     <div
       className="tooltip-container"

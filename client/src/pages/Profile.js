@@ -11,6 +11,7 @@ import Post from "../components/Post";
 import Loading from "../components/Loading";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import ShowToolTip from "../components/ShowToolTip";
 import { checkWhichProfilePic } from "../utils/checkProfilePic";
 
 const initialComment = { text: "" };
@@ -90,7 +91,7 @@ const Profile = () => {
       setLoading(false);
     }
     fetchUser();
-  }, [params._id, posts.length, comment, likes]); 
+  }, [params._id, posts.length, comment, likes]);
 
   const handleLike = async (postId) => {
     const req = { user_id: storedUser._id };
@@ -100,14 +101,14 @@ const Profile = () => {
         console.log(res);
         toast.success("Liked!");
         const updatedLikesLength = res.data.updatedPost.likes.length;
-        setLikes(updatedLikesLength);  
+        setLikes(updatedLikesLength);
       })
       .catch((err) => {
         console.log(err);
         setError(err.response.data.error);
         toast.error(err.response.data.error);
       });
-  }; 
+  };
 
   const handleCommentInput = (event) => {
     setComment({
@@ -155,7 +156,9 @@ const Profile = () => {
               Edit Profile
             </Button>
             <h1 className="profile-newpost" onClick={openForm}>
-              <AiOutlinePlusCircle />
+              <ShowToolTip post={null}>
+                <AiOutlinePlusCircle />
+              </ShowToolTip>
             </h1>
             {form && (
               <div className="profile-newpost-form">
@@ -172,7 +175,11 @@ const Profile = () => {
                     <Form.Control type="file" name="file" />
                   </Form.Group>
                   <button type="submit">Post</button>
-                  <button type="button" onClick={closeForm}>
+                  <button
+                    style={{ marginTop: "5px" }}
+                    type="button"
+                    onClick={closeForm}
+                  >
                     Cancel
                   </button>
                 </Form>

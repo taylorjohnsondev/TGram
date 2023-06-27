@@ -17,14 +17,16 @@ function ModalComment({
 
   return (
     <>
-      <FaRegComment onClick={handleShow} />
+      <FaRegComment size={24} onClick={handleShow} />
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Leave a comment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={(event) => handleCommentSubmit(event, post)}>
+          <Form
+            onSubmit={(event) => handleCommentSubmit(event, post)}
+          >
             <Form.Group
               className="mb-3"
               controlId="exampleForm.ControlTextarea1"
@@ -37,13 +39,22 @@ function ModalComment({
                 onChange={handleCommentInput}
               />
             </Form.Group>
-            <Button className="bootBtn" type="submit" variant="primary" onClick={handleClose}>
+            <Button
+              className="bootBtn"
+              type="submit"
+              variant="primary"
+              onClick={handleClose}
+            >
               Post Comment
             </Button>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button className="bootBtn" variant="secondary" onClick={handleClose}>
+          <Button
+            className="bootBtn"
+            variant="secondary"
+            onClick={handleClose}
+          >
             Close
           </Button>
         </Modal.Footer>

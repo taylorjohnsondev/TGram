@@ -1,8 +1,8 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -37,6 +37,10 @@ code {
   text-align: center;
   display: block;
   margin: 0 auto;
+}
+
+.filter-btn-container {
+  margin: 5px;
 }
 
 /*POST CSS*/
@@ -77,6 +81,27 @@ code {
   background-color: transparent;
   opacity: 50%;
   border: 0px;
+}
+
+.description {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 5px;
+  padding: 5px;
+  font-size: 24px;
+}
+.post-date {
+  font-style: italic;
+  font-weight: light;
+}
+
+.like-message-container {
+  display: flex;
+  gap: 5px;
+  width: 2rem;
+}
+
+.modal-align {
+  margin: 5px;
 }
 
 @media only screen and (max-width: 600px) {
@@ -183,7 +208,8 @@ span.label {
   font-weight: normal;
 }
 span.icon {
-  background: url("../src/assets/google-icon.svg") transparent 5px 50% no-repeat;
+  background: url("../src/assets/google-icon.svg") transparent 5px 50%
+    no-repeat;
   display: inline-block;
   vertical-align: middle;
   width: 42px;
@@ -200,7 +226,7 @@ span.buttonText {
 
 .logout-container {
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   margin-top: 10%;
   background-color: #fff;
   border-radius: 10px;

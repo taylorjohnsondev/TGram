@@ -1,12 +1,16 @@
 import { Card, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import "./css/Comment.css";
 
 const ShowComments = ({ post }) => {
   return (
     <div>
       {post.comments.map((comment) => (
-        <Card style={{ width: "18rem" }} key={comment._id}>
-          <Card.Header style={{ textAlign: "center" }}>
+        <Card className="comment" key={comment._id}>
+          <Card.Header
+            className="header"
+            style={{ textAlign: "center" }}
+          >
             <Card.Img
               src={
                 comment.author.picture !== "/defaultpicture.png"
@@ -16,25 +20,19 @@ const ShowComments = ({ post }) => {
                       "/defaultpicture.png"
                     }`
               }
-              style={{
-                width: "25px",
-                margin: "3px",
-                borderRadius: "50px",
-              }}
+              className="profile-picture"
             />
-            <Link
-              to={`/users/${comment.author._id}`}
-              className="Link"
-            >
+            <Link to={`/users/${comment.author._id}`} id="username">
               @{comment.author.username}
             </Link>
           </Card.Header>
-
-          <ListGroup variant="flush">
-            <ListGroup.Item style={{ textAlign: "center" }}>
-              {comment.text}{" "}
-            </ListGroup.Item>
-          </ListGroup>
+          <Card.Body className="card-body">
+            <ListGroup variant="flush">
+              <ListGroup.Item className="comment-text">
+                {comment.text}{" "}
+              </ListGroup.Item>
+            </ListGroup>
+          </Card.Body>
         </Card>
       ))}
     </div>

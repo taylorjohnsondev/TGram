@@ -101,7 +101,7 @@ const Homepage = () => {
     <div className="posts-container">
       {storedUser ? (
         <>
-          <div>
+          <div className="filter-btn-container">
             <Button
               className="bootBtn"
               onClick={() => setShowFollowedPosts(false)}

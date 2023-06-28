@@ -20,7 +20,7 @@ const Post = ({
   const isHomePage = location.pathname === "/";
 
   const { user } = useContext(AuthContext);
-
+  console.log(post);
   return (
     <>
       <div key={post._id} className="post-container">
@@ -44,9 +44,10 @@ const Post = ({
             />
           </Button>
         )}
+        {/* post.file already had a "/" in front of it. */}
         <div className="photo-container">
           <img
-            src={`https://tgram-social.netlify.app${post.file}`}
+            src={`https://tgram-server.onrender.com${post.file}`}
             alt="Post Media"
             className="photo"
           />

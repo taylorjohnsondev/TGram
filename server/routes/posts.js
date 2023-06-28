@@ -94,7 +94,7 @@ router.post(
     try {
       const { text } = req.body;
       const author = req.params._id;
-      const file = "uploads/" + req.file.filename;
+      const file = "/uploads/" + req.file.filename;
 
       const post = await Post.create({ file, text, author });
 

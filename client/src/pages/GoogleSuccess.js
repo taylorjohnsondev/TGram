@@ -33,7 +33,7 @@ const GoogleSuccess = () => {
 
     localStorage.setItem("token", JSON.stringify(token));
 
-    const interval = setInterval(() => navigate("/"), 0.5);
+    const interval = setInterval(() => navigate("/"), 1000);
 
     return () => clearInterval(interval);
   }, [navigate]);

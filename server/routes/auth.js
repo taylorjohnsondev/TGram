@@ -139,7 +139,7 @@ router.get(
 
 /* This code is defining a GET route for "/user". When a GET request is made to this route, it sends a
 JSON response with the `req.user` object, which contains information about the authenticated user.
-This route is likely used to retrieve user information for use in the client-side application. */
+This route is  used to retrieve user information for use in the client-side application. */
 router.get("/user", (req, res) => {
   console.log(req.user);
   res.status(200).json(req.user);

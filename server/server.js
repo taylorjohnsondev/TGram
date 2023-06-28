@@ -53,20 +53,17 @@ app.use(function (req, res, next) {
 
 /* These lines of code are setting up middleware for the Express application: */
 
-if (NODE_ENV !== "production") {
-  app.use(morgan("dev"));
-}
-
+app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("./uploads", express.static(path.join(__dirname, "uploads")));
 
 //routes
 app.use("/api", require("./routes/index"));
 
-app.get("./uploads/:filename", (req, res) => {
+app.get("/uploads/:filename", (req, res) => {
   const filename = req.params.filename;
-  res.sendFile(path.join(__dirname, "/uploads", filename));
+  res.sendFile(path.join(__dirname, "uploads", filename));
 });
 
 app.get("*", (req, res) => {

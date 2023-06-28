@@ -34,7 +34,7 @@ const Post = ({
               className="post-picture"
               src={
                 post?.author?.picture !== "/defaultpicture.png"
-                  ? `/${post.author?.picture}`
+                  ? `https://tgram-server.onrender.com/${post.author?.picture}`
                   : `${
                       post.author.googlePicture ||
                       "/defaultpicture.png"

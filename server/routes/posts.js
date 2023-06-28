@@ -82,7 +82,9 @@ router.get("/following/:_id", async (req, res) => {
 router.post(
   "/:_id",
   fileupload.single("file"),
+
   async (req, res, next) => {
+    console.log(req);
     if (!req.file) {
       return res
         .status(422)

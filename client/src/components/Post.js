@@ -20,7 +20,7 @@ const Post = ({
   const isHomePage = location.pathname === "/";
 
   const { user } = useContext(AuthContext);
-  console.log(post);
+
   return (
     <>
       <div key={post._id} className="post-container">

@@ -44,8 +44,9 @@ const EditProfile = () => {
     if (form.checkValidity() === false) {
       e.stopPropagation();
     } else {
+      // This route requires an authorization header which axiosPrivate provides
       try {
-        await axios.put(`/users/${params._id}/edit`, {
+        await axiosPrivate.put(`/users/${params._id}/edit`, {
           username: formData.username,
           password: formData.password,
         });

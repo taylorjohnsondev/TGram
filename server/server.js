@@ -22,6 +22,7 @@ app.use(
     origin: [
       "https://tgram-social.netlify.app",
       "https://tgram-client.onrender.com",
+      "http://localhost:3000/",
     ],
     credentials: true,
   })
@@ -58,13 +59,14 @@ if (NODE_ENV !== "production") {
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 //routes
 app.use("/api", require("./routes/index"));
 
 app.get("/uploads/:filename", (req, res) => {
   const filename = req.params.filename;
-  res.sendFile(path.join(__dirname, "../server/uploads", filename));
+  res.sendFile(path.join(__dirname, "/uploads", filename));
 });
 
 app.get("*", (req, res) => {
@@ -90,6 +92,15 @@ if (NODE_ENV === "production") {
   app.use(
     "/uploads",
     express.static(path.resolve(__dirname, "uploads"))
+  );
+  app.use(
+    "./uploads",
+    express.static(path.join(__dirname, "uploads"))
+  );
+
+  app.use(
+    "/uploads",
+    express.static(path.join(__dirname, "uploads"))
   );
 
   app.all("*", (req, res, next) => {

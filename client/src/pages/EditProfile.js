@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { Form, Button, InputGroup } from "react-bootstrap";
-import axios from "../hooks/useAxios";
 import { toast } from "react-toastify";
 import { AuthContext } from "../Context/AuthContext";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
@@ -24,7 +23,7 @@ const EditProfile = () => {
 
   useEffect(() => {
     async function fetchUser() {
-      const userData = await axios.get(`/users/${params._id}`);
+      const userData = await axiosPrivate.get(`/users/${params._id}`);
       setUser(userData.data);
       setFormData({ username: userData.data.username });
       if (params._id !== storedUser._id) {

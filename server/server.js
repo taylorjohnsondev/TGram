@@ -56,7 +56,7 @@ app.use(function (req, res, next) {
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use("./uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 //routes
 app.use("/api", require("./routes/index"));
@@ -85,20 +85,6 @@ connectDB();
 
 if (NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/build")));
-
-  app.use(
-    "/uploads",
-    express.static(path.resolve(__dirname, "uploads"))
-  );
-  app.use(
-    "./uploads",
-    express.static(path.join(__dirname, "uploads"))
-  );
-
-  app.use(
-    "/uploads",
-    express.static(path.join(__dirname, "uploads"))
-  );
 
   app.all("*", (req, res, next) => {
     res.sendFile(

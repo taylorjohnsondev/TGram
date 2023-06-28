@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Button, Form } from "react-bootstrap";
-import axios from "../hooks/useAxios";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import Follow from "../components/Follow";
 import ShowFollowers from "../components/ShowFollowers";
@@ -49,7 +48,7 @@ const Profile = () => {
     postData.append("text", text);
     postData.append("file", file);
     try {
-      const response = await axios.post(
+      const response = await axiosPrivate.post(
         `/posts/${params._id}`,
         postData
       );
@@ -81,8 +80,8 @@ const Profile = () => {
 
   useEffect(() => {
     async function fetchUser() {
-      const userData = await axios.get(`/users/${params._id}`);
-      const postData = await axios.get(`/posts/${params._id}`);
+      const userData = await axiosPrivate.get(`/users/${params._id}`);
+      const postData = await axiosPrivate.get(`/posts/${params._id}`);
 
       setFollowers(userData.data.followers);
       setUser(userData.data);

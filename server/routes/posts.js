@@ -84,7 +84,6 @@ router.post(
   fileupload.single("file"),
 
   async (req, res, next) => {
-    console.log(req);
     if (!req.file) {
       return res
         .status(422)

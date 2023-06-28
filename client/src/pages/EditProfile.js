@@ -4,6 +4,7 @@ import { Form, Button, InputGroup } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { AuthContext } from "../Context/AuthContext";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import axios from "../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
 import AvatarEditor from "../components/Avatar/AvatarEditor";
 
@@ -44,7 +45,7 @@ const EditProfile = () => {
       e.stopPropagation();
     } else {
       try {
-        await axiosPrivate.put(`/users/${params._id}/edit`, {
+        await axios.put(`/users/${params._id}/edit`, {
           username: formData.username,
           password: formData.password,
         });

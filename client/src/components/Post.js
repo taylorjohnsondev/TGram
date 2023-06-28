@@ -45,7 +45,11 @@ const Post = ({
           </Button>
         )}
         <div className="photo-container">
-          <img src={post.file} alt="Post Media" className="photo" />
+          <img
+            src={`https://tgram-social.netlify.app${post.file}`}
+            alt="Post Media"
+            className="photo"
+          />
         </div>
         <div className="description">{post.text}</div>
         <div className="post-date">

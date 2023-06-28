@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Button, Form } from "react-bootstrap";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import axios from "../hooks/useAxios";
 import Follow from "../components/Follow";
 import ShowFollowers from "../components/ShowFollowers";
 import Post from "../components/Post";
@@ -48,7 +49,7 @@ const Profile = () => {
     postData.append("text", text);
     postData.append("file", file);
     try {
-      const response = await axiosPrivate.post(
+      const response = await axios.post(
         `/posts/${params._id}`,
         postData
       );

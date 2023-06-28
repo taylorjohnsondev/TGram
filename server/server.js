@@ -57,19 +57,15 @@ app.use(function (req, res, next) {
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 //routes
 app.use("/api", require("./routes/index"));
 
-app.get("api/uploads/:filename", (req, res) => {
+app.get("/uploads/:filename", (req, res) => {
   const filename = req.params.filename;
-  res.sendFile(path.join(__dirname, "uploads", filename));
+  res.sendFile(path.join("/.uploads/", filename));
 });
-
-// app.get("*", (req, res) => {
-//   res.send("No routes matched.", 404);
-// });
-app.use("./uploads", express.static(path.join(__dirname, "uploads")));
 
 const url = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@taylorgram.plovuar.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -81,6 +77,10 @@ async function connectDB() {
     console.error(error);
   }
 }
+
+app.get("*", (req, res) => {
+  res.send("No routes matched.", 404);
+});
 
 connectDB();
 

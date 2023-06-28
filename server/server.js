@@ -64,7 +64,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 //routes
 app.use("/api", require("./routes/index"));
 
-app.get("/uploads/:filename", (req, res) => {
+app.get("./uploads/:filename", (req, res) => {
   const filename = req.params.filename;
   res.sendFile(path.join(__dirname, "/uploads", filename));
 });

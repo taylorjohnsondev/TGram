@@ -7,6 +7,7 @@ const DB_USERNAME = process.env.DB_USERNAME;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const JWT_SECRET = process.env.JWT_SECRET;
 const SESSION_SECRET = process.env.SESSION_SECRET;
+const REDIRECT_SUCCESS_PAGE = process.env.REDIRECT_SUCCESS_PAGE;
 
 module.exports = {
   NODE_ENV,
@@ -18,4 +19,5 @@ module.exports = {
   DB_PASSWORD,
   JWT_SECRET,
   SESSION_SECRET,
+  REDIRECT_SUCCESS_PAGE,
 };

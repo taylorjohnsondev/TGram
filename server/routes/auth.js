@@ -5,6 +5,7 @@ const User = require("../models/user");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const fileupload = require("../middleware/fileUpload");
+const { REDIRECT_SUCCESS_PAGE } = require("../config/constants");
 
 router.route("/").get((req, res, next) => {
   res.send("auth endpoint");
@@ -131,9 +132,7 @@ router.get(
   (req, res) => {
     const { user, token } = req.user;
 
-    res.redirect(
-      `https://tgram-client.onrender.com/googleSuccess/?token=${token}`
-    );
+    res.redirect(`${REDIRECT_SUCCESS_PAGE}?token=${token}`);
   }
 );
 

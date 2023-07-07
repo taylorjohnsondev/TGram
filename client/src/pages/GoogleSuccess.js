@@ -35,7 +35,7 @@ const GoogleSuccess = () => {
 
     const timeout = setTimeout(() => {
       navigate("/");
-    }, 1000);
+    }, 3000);
 
     return () => clearTimeout(timeout);
   }, [navigate]);

@@ -113,9 +113,8 @@ const Login = ({ handleGoogleLogIn }) => {
         <Button className="bootBtn" variant="primary" type="submit">
           Submit
         </Button>
-        or
       </Form>
-      <div>
+      {/* <div>
         <div
           id="gSignInWrapper"
           onClick={(e) => handleGoogleLogIn(e)}
@@ -125,7 +124,7 @@ const Login = ({ handleGoogleLogIn }) => {
             <span className="buttonText">Continue with Google</span>
           </div>
         </div>
-      </div>
+      </div> */} 
       <div className="navigateBtn">
         Don't have an account?
         <br />

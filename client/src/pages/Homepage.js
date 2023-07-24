@@ -23,9 +23,7 @@ const Homepage = () => {
     async function fetchPosts() {
       let response;
       if (showFollowedPosts) {
-        response = await axios.get(
-          `/posts/following/${storedUser._id}`
-        );
+        response = await axios.get(`/posts/following/${storedUser._id}`);
       } else {
         response = await axios.get("/posts");
       }
@@ -119,10 +117,7 @@ const Homepage = () => {
       ) : (
         <div className="username">
           Welcome to TGram! Have an account?
-          <Button
-            className="bootBtn"
-            onClick={() => navigate("/login")}
-          >
+          <Button className="bootBtn" onClick={() => navigate("/login")}>
             Login
           </Button>
         </div>

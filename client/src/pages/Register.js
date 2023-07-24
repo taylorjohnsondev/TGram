@@ -185,16 +185,15 @@ const Register = ({ handleGoogleLogIn }) => {
         <Button variant="primary" type="submit">
           Submit
         </Button>
-        or
       </Form>
 
-      <div id="gSignInWrapper" onClick={(e) => handleGoogleLogIn(e)}>
+      {/* <div id="gSignInWrapper" onClick={(e) => handleGoogleLogIn(e)}>
         <span className="label"></span>
         <div id="customBtn" className="customGPlusSignIn">
           <span className="icon"></span>
           <span className="buttonText">Continue with Google</span>
         </div>
-      </div>
+      </div> */} 
     </>
   );
 };

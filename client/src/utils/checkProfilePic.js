@@ -8,12 +8,12 @@ export function checkWhichProfilePic(user) {
     user?.picture?.startsWith("uploads") ||
     user?.picture?.startsWith("/uploads")
   ) {
-    return `https://tgram-server.onrender.com/${user.picture}`;
+    return `https://tgram-server-92rm.onrender.com/${user.picture}`;
   } else if (user?.googlePicture) {
     return user.googlePicture;
   } else {
     return (
-      `https://tgram-server.onrender.com/${user.picture}` ||
+      `https://tgram-server-92rm.onrender.com/${user.picture}` ||
       "defaultpicture.png"
     );
   }

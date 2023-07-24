@@ -14,7 +14,7 @@ const ShowComments = ({ post }) => {
             <Card.Img
               src={
                 comment.author?.picture !== "/defaultpicture.png"
-                  ? `https://tgram-server.onrender.com/${comment.author?.picture}`
+                  ? `https://tgram-server-92rm.onrender.com/${comment.author?.picture}`
                   : `${
                       comment.author.googlePicture ||
                       "/defaultpicture.png"

@@ -34,7 +34,7 @@ const Post = ({
               className="post-picture"
               src={
                 post?.author?.picture !== "/defaultpicture.png"
-                  ? `https://tgram-server.onrender.com/${post.author?.picture}`
+                  ? `https://tgram-server-92rm.onrender.com/${post.author?.picture}`
                   : `${
                       post.author.googlePicture ||
                       "/defaultpicture.png"
@@ -47,7 +47,7 @@ const Post = ({
         {/* post.file already had a "/" in front of it. */}
         <div className="photo-container">
           <img
-            src={`https://tgram-server.onrender.com${post.file}`}
+            src={`https://tgram-server-92rm.onrender.com${post.file}`}
             alt="Post Media"
             className="photo"
           />
